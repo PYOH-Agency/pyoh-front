@@ -3,9 +3,9 @@
     <!-- Logo PYOH en haut à gauche -->
     <div class="absolute top-8 left-8 z-30">
       <img 
-        src="/images/Logos Pyoh-04.png" 
+        src="/images/Logos Pyoh-07.png" 
         alt="PYOH Logo" 
-        class="h-20 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+        class="h-40 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
       />
     </div>
 

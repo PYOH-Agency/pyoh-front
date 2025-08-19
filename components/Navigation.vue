@@ -1,8 +1,14 @@
 <template>
   <div class="fixed top-0 left-0 z-50 w-full h-full pointer-events-none">
-    <!-- Bouton de basculement de thème (haut gauche) -->
-    <div class="absolute top-6 left-6 pointer-events-auto">
-      <ThemeToggle />
+    <!-- Logo PYOH en haut à gauche (pas sur la home) -->
+    <div v-if="!isHomePage" class="absolute top-6 left-6 pointer-events-auto">
+      <NuxtLink to="/" class="block">
+        <img 
+          src="/images/Logos Pyoh-04.png" 
+          alt="PYOH" 
+          class="h-20 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+        />
+      </NuxtLink>
     </div>
 
     <!-- Bouton de navigation discrète (haut droite) -->
@@ -10,19 +16,19 @@
       <button
         @click="toggleMenu"
         class="nav-button group relative w-12 h-12 flex items-center justify-center"
-        :class="{ 'bg-accent-hover': isMenuOpen }"
+        :class="{ 'bg-white/20': isMenuOpen }"
       >
         <div class="flex flex-col items-center justify-center space-y-1">
           <span 
-            class="w-5 h-0.5 text-theme-primary transition-all duration-300"
+            class="w-5 h-0.5 bg-white transition-all duration-300"
             :class="{ 'rotate-45 translate-y-1/2': isMenuOpen }"
           ></span>
           <span 
-            class="w-5 h-0.5 text-theme-primary transition-all duration-300"
+            class="w-5 h-0.5 bg-white transition-all duration-300"
             :class="{ 'opacity-0': isMenuOpen }"
           ></span>
           <span 
-            class="w-5 h-0.5 text-theme-primary transition-all duration-300"
+            class="w-5 h-0.5 bg-white transition-all duration-300"
             :class="{ '-rotate-45 -translate-y-1/2': isMenuOpen }"
           ></span>
         </div>
@@ -45,12 +51,12 @@
     >
       <div
         v-if="isMenuOpen"
-        class="fixed inset-0 bg-theme-primary/95 backdrop-blur-md pointer-events-auto"
+        class="fixed inset-0 bg-black/95 backdrop-blur-md pointer-events-auto"
       >
         <!-- Bouton de fermeture -->
         <button
           @click="closeMenu"
-          class="absolute top-6 right-6 text-theme-tertiary hover:text-theme-primary transition-colors duration-300 z-50"
+          class="absolute top-6 right-6 text-white/60 hover:text-white transition-colors duration-300 z-50"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -60,14 +66,14 @@
         <!-- Contenu du menu en deux parties -->
         <div class="relative h-full flex">
           <!-- Partie gauche : Navigation -->
-          <div class="w-1/2 h-full flex items-center justify-center border-r border-theme-primary">
+          <div class="w-1/2 h-full flex items-center justify-center border-r border-white/10">
             <div class="text-left space-y-8 max-w-lg">
               <!-- Logo/Nom -->
               <div class="mb-16 animate-fade-in-up">
                 <img 
-                  src="/images/Logos Pyoh-06.png" 
+                  src="/images/Logos Pyoh-07.png" 
                   alt="PYOH Logo" 
-                  class="h-48 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+                  class="h-64 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
                 />
               </div>
 
@@ -78,7 +84,7 @@
                   :key="item.path"
                   :to="item.path"
                   @click="closeMenu"
-                  class="block text-4xl font-light text-theme-secondary hover:text-theme-primary transition-all duration-300 hover:scale-105 py-2 px-4 rounded-lg group relative"
+                  class="block text-4xl font-light text-white/80 hover:text-white transition-all duration-300 hover:scale-105 py-2 px-4 rounded-lg group relative"
                   :style="{ animationDelay: `${0.2 + index * 0.1}s` }"
                 >
                   <span class="relative">
@@ -90,12 +96,6 @@
                   <span class="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-pyoh-yellow rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100"></span>
                 </NuxtLink>
               </nav>
-
-              <!-- Informations de contact -->
-              <div class="mt-16 animate-fade-in-up" style="animation-delay: 0.6s;">
-                <p class="text-theme-tertiary text-lg">contact@pyoh.fr</p>
-                <p class="text-theme-quaternary text-sm mt-2">+33 6 20 99 46 01</p>
-              </div>
             </div>
           </div>
 
@@ -105,8 +105,8 @@
             <div class="flex-1 flex items-center justify-center">
               <div class="w-full max-w-2xl mx-auto px-8">
                 <div class="text-center mb-8 animate-fade-in-up" style="animation-delay: 0.3s;">
-                  <h2 class="text-3xl font-bold text-theme-primary mb-4">Contactez-nous</h2>
-                  <p class="text-theme-secondary text-lg">Discutons de votre projet</p>
+                  <h2 class="text-3xl font-bold text-white mb-4">Contactez-nous</h2>
+                  <p class="text-white/70 text-lg">Discutons de votre projet</p>
                 </div>
 
                 <!-- Onglets -->
@@ -115,8 +115,8 @@
                     @click="activeTab = 'contact'"
                     class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg relative group"
                     :class="{ 
-                      'text-pyoh-yellow border-pyoh-yellow bg-accent-primary': activeTab === 'contact', 
-                      'text-theme-tertiary border-transparent hover:text-theme-primary hover:border-theme-secondary hover:bg-accent-primary': activeTab !== 'contact' 
+                      'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'contact', 
+                      'text-white/60 border-transparent hover:text-white hover:border-white/30 hover:bg-white/5': activeTab !== 'contact' 
                     }"
                   >
                     Contact
@@ -130,8 +130,8 @@
                     @click="activeTab = 'calendar'"
                     class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg relative group"
                     :class="{ 
-                      'text-pyoh-yellow border-pyoh-yellow bg-accent-primary': activeTab === 'calendar', 
-                      'text-theme-tertiary border-transparent hover:text-theme-primary hover:border-theme-secondary hover:bg-accent-primary': activeTab !== 'calendar' 
+                      'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'calendar', 
+                      'text-white/60 border-transparent hover:text-white hover:border-white/30 hover:bg-white/5': activeTab !== 'calendar' 
                     }"
                   >
                     Rendez-vous
@@ -153,7 +153,7 @@
                   leave-to-class="opacity-0 translate-y-4"
                 >
                   <div v-if="activeTab" class="animate-fade-in-up" style="animation-delay: 0.5s;">
-                    <div class="bg-accent-primary backdrop-blur-sm border border-theme-primary rounded-lg p-8 shadow-2xl">
+                    <div class="bg-white/15 backdrop-blur-sm border border-white/30 rounded-lg p-8 shadow-2xl">
                       <ContactForm v-if="activeTab === 'contact'" />
                       <CalendarWidget v-else-if="activeTab === 'calendar'" />
                     </div>
@@ -171,7 +171,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import ThemeToggle from './ThemeToggle.vue'
 
 // État du menu
 const isMenuOpen = ref(false)
@@ -220,15 +219,11 @@ onMounted(() => {
 <style scoped>
 /* Styles spécifiques au composant */
 .nav-button {
-  @apply backdrop-blur-sm transition-all duration-300 rounded-full border-2;
-  background-color: var(--accent-primary);
-  border-color: var(--border-primary);
+  @apply bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 rounded-full border border-white/20;
 }
 
 .nav-button:hover {
-  background-color: var(--accent-hover);
-  border-color: var(--border-secondary);
-  transform: scale(1.05);
+  @apply bg-white/20 transform scale-105;
 }
 
 /* Utilisation de la couleur jaune PYOH */
