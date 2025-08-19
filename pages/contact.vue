@@ -141,7 +141,7 @@
 <script setup>
 // Configuration de la page
 useHead({
-  title: 'Contact - PYOH Agency',
+  title: 'Contact - 025y',
   meta: [
     { name: 'description', content: 'Contactez PYOH Agency pour discuter de votre projet digital. Nous sommes là pour vous accompagner dans la réalisation de vos objectifs.' }
   ]

@@ -93,13 +93,13 @@
       :disabled="isSubmitting"
       class="w-full px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105"
     >
-      <span v-if="!isSubmitting">Envoyer le message</span>
+      <span v-if="!isSubmitting">Envoyer à contact@pyoh.fr</span>
       <span v-else class="flex items-center justify-center">
         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        Envoi en cours...
+        Préparation de l'email...
       </span>
     </button>
 
@@ -137,14 +137,28 @@ const handleSubmit = async () => {
   submitMessage.value = ''
 
   try {
-    // Simulation d'envoi (remplacer par votre API)
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    // Préparer le contenu de l'email
+    const emailContent = `
+Nouveau message de contact depuis le site PYOH
+
+Nom: ${form.value.name}
+Email: ${form.value.email}
+Téléphone: ${form.value.phone || 'Non renseigné'}
+Type de projet: ${form.value.projectType}
+Budget estimé: ${form.value.budget || 'Non renseigné'}
+
+Message:
+${form.value.message}
+
+---
+Envoyé depuis le formulaire de contact du site PYOH
+    `.trim()
+
+    // Envoyer l'email à contact@pyoh.fr
+    const mailtoLink = `mailto:contact@pyoh.fr?subject=Nouveau message de contact - ${form.value.projectType}&body=${encodeURIComponent(emailContent)}`
     
-    // Ici, vous pouvez ajouter l'appel à votre API
-    // const response = await $fetch('/api/contact', {
-    //   method: 'POST',
-    //   body: form.value
-    // })
+    // Ouvrir le client email par défaut
+    window.open(mailtoLink, '_blank')
     
     submitMessage.value = 'Message envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.'
     

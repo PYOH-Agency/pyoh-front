@@ -71,13 +71,6 @@
                     {{ getProjectTitle(project) }}
                   </h1>
                 </div>
-
-                <!-- Sous-titre -->
-                <div class="mb-0">
-                  <p class="text-lg md:text-xl text-white/80 max-w-2xl leading-relaxed">
-                    {{ getProjectSubtitle(project) }}
-                  </p>
-                </div>
               </div>
             </div>
           </div>

@@ -26,7 +26,7 @@ export const useProjects = () => {
       error.value = null
 
       const response = await find<ProjectsResponse>('projects', {
-        populate: options?.populate || ['media'],
+        populate: options?.populate || ['media', 'coverPicture', 'types'],
         sort: options?.sort || ['createdAt:desc'],
         filters: options?.filters || {},
         pagination: options?.pagination || { page: 1, pageSize: 100 }

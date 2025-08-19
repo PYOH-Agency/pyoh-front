@@ -34,9 +34,6 @@
       <div class="text-right">
         <p v-if="currentProjectClient" class="text-white/60 text-sm font-medium">{{ currentProjectClient }}</p>
         <p v-if="currentProjectYear" class="text-white/40 text-xs">{{ currentProjectYear }}</p>
-        <!-- Fallback si pas de projet -->
-        <p v-if="!currentProjectClient && !currentProjectYear" class="text-white/60 text-sm font-medium">PYOH Agency</p>
-        <p v-if="!currentProjectClient && !currentProjectYear" class="text-white/40 text-xs">{{ currentYear }}</p>
       </div>
     </div>
 
@@ -92,15 +89,15 @@
                     <!-- Effet de soulignement jaune au hover -->
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pyoh-yellow transition-all duration-300 group-hover:w-full"></span>
                   </span>
-                  <!-- Point jaune au hover -->
-                  <span class="absolute -left-2 top-1/2 -translate-y-1/2 w-2 h-2 bg-pyoh-yellow rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100"></span>
+                  <!-- Point jaune au hover - repositionné pour être visible -->
+                  <span class="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-pyoh-yellow rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100"></span>
                 </NuxtLink>
               </nav>
 
               <!-- Informations de contact -->
               <div class="mt-16 animate-fade-in-up" style="animation-delay: 0.6s;">
-                <p class="text-white/60 text-lg">hello@pyoh.agency</p>
-                <p class="text-white/40 text-sm mt-2">+33 1 23 45 67 89</p>
+                <p class="text-white/60 text-lg">contact@pyoh.fr</p>
+                <p class="text-white/40 text-sm mt-2">+33 6 20 99 46 01</p>
               </div>
             </div>
           </div>
@@ -119,23 +116,33 @@
                 <div class="flex justify-center space-x-4 mb-8 animate-fade-in-up" style="animation-delay: 0.4s;">
                   <button
                     @click="activeTab = 'contact'"
-                    class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg"
+                    class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg relative group"
                     :class="{ 
-                      'text-pyoh-yellow border-pyoh-yellow': activeTab === 'contact', 
-                      'text-white/60 border-transparent hover:text-white hover:border-white/30': activeTab !== 'contact' 
+                      'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'contact', 
+                      'text-white/60 border-transparent hover:text-white hover:border-white/30 hover:bg-white/5': activeTab !== 'contact' 
                     }"
                   >
                     Contact
+                    <!-- Point jaune au hover pour l'onglet actif -->
+                    <span 
+                      v-if="activeTab === 'contact'"
+                      class="absolute -top-1 -right-1 w-3 h-3 bg-pyoh-yellow rounded-full animate-pulse"
+                    ></span>
                   </button>
                   <button
                     @click="activeTab = 'calendar'"
-                    class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg"
+                    class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg relative group"
                     :class="{ 
-                      'text-pyoh-yellow border-pyoh-yellow': activeTab === 'calendar', 
-                      'text-white/60 border-transparent hover:text-white hover:border-white/30': activeTab !== 'calendar' 
+                      'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'calendar', 
+                      'text-white/60 border-transparent hover:text-white hover:border-white/30 hover:bg-white/5': activeTab !== 'calendar' 
                     }"
                   >
                     Rendez-vous
+                    <!-- Point jaune au hover pour l'onglet actif -->
+                    <span 
+                      v-if="activeTab === 'calendar'"
+                      class="absolute -top-1 -right-1 w-3 h-3 bg-pyoh-yellow rounded-full animate-pulse"
+                    ></span>
                   </button>
                 </div>
 
@@ -149,7 +156,7 @@
                   leave-to-class="opacity-0 translate-y-4"
                 >
                   <div v-if="activeTab" class="animate-fade-in-up" style="animation-delay: 0.5s;">
-                    <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-8">
+                    <div class="bg-white/15 backdrop-blur-sm border border-white/30 rounded-lg p-8 shadow-2xl">
                       <ContactForm v-if="activeTab === 'contact'" />
                       <CalendarWidget v-else-if="activeTab === 'calendar'" />
                     </div>
@@ -265,5 +272,11 @@ onMounted(() => {
 /* Effet de hover sur les onglets */
 button:hover .border-pyoh-yellow {
   border-color: var(--pyoh-yellow-hover);
+}
+
+/* Point jaune au hover des liens de navigation */
+.nav a.group:hover .bg-pyoh-yellow {
+  background-color: var(--pyoh-yellow) !important;
+  z-index: 10;
 }
 </style>
