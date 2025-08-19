@@ -20,7 +20,7 @@
             </div>
             
             <!-- Témoignage -->
-            <blockquote class="text-2xl md:text-3xl lg:text-4xl text-white/90 font-light leading-relaxed mb-8 italic">
+            <blockquote class="text-2xl md:text-3xl lg:text-4xl text-theme-secondary font-light leading-relaxed mb-8 italic">
               "{{ testimonial.testimonial }}"
             </blockquote>
             
@@ -29,7 +29,7 @@
               <p class="text-xl font-semibold text-pyoh-yellow">
                 {{ testimonial.name }}
               </p>
-              <p class="text-white/60 text-lg">
+              <p class="text-theme-tertiary text-lg">
                 {{ testimonial.client }}
               </p>
             </div>
@@ -43,7 +43,7 @@
       <!-- Bouton précédent -->
       <button 
         @click="previous"
-        class="p-3 text-white/60 hover:text-pyoh-yellow transition-colors duration-300 disabled:opacity-30"
+        class="p-3 text-theme-tertiary hover:text-pyoh-yellow transition-colors duration-300 disabled:opacity-30"
         :disabled="currentIndex === 0"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +60,7 @@
           class="w-3 h-3 rounded-full transition-all duration-300"
           :class="{
             'bg-pyoh-yellow': currentIndex === index,
-            'bg-white/30 hover:bg-white/50': currentIndex !== index
+            'bg-theme-quaternary hover:bg-theme-tertiary': currentIndex !== index
           }"
         ></button>
       </div>
@@ -68,7 +68,7 @@
       <!-- Bouton suivant -->
       <button 
         @click="next"
-        class="p-3 text-white/60 hover:text-pyoh-yellow transition-colors duration-300 disabled:opacity-30"
+        class="p-3 text-theme-tertiary hover:text-pyoh-yellow transition-colors duration-300 disabled:opacity-30"
         :disabled="currentIndex === testimonials.length - 1"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,7 +81,7 @@
     <div class="text-center mt-6">
       <button 
         @click="toggleAutoPlay"
-        class="text-sm text-white/40 hover:text-pyoh-yellow transition-colors duration-300"
+        class="text-sm text-theme-quaternary hover:text-pyoh-yellow transition-colors duration-300"
       >
         {{ isAutoPlaying ? 'Pause' : 'Lecture automatique' }}
       </button>
