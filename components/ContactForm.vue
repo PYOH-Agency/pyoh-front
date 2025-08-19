@@ -57,23 +57,6 @@
       </select>
     </div>
 
-    <!-- Budget -->
-    <div>
-      <label for="budget" class="block text-sm font-medium text-white/80 mb-2">Budget estimé</label>
-      <select
-        id="budget"
-        v-model="form.budget"
-        class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all duration-300"
-      >
-        <option value="">Sélectionnez un budget</option>
-        <option value="5k-10k">5k - 10k €</option>
-        <option value="10k-25k">10k - 25k €</option>
-        <option value="25k-50k">25k - 50k €</option>
-        <option value="50k+">50k+ €</option>
-        <option value="discuss">À discuter</option>
-      </select>
-    </div>
-
     <!-- Message -->
     <div>
       <label for="message" class="block text-sm font-medium text-white/80 mb-2">Description du projet *</label>

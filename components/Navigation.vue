@@ -4,9 +4,10 @@
     <div v-if="!isHomePage" class="absolute top-6 left-6 pointer-events-auto">
       <NuxtLink to="/" class="block">
         <img 
-          src="/images/Logos Pyoh-04.png" 
+          :src="logoImage"
           alt="PYOH" 
           class="h-20 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+          :class="logoClasses"
         />
       </NuxtLink>
     </div>
@@ -15,21 +16,24 @@
     <div class="absolute top-6 right-6 pointer-events-auto">
       <button
         @click="toggleMenu"
-        class="nav-button group relative w-12 h-12 flex items-center justify-center"
-        :class="{ 'bg-white/20': isMenuOpen }"
+        class="nav-button group relative w-12 h-12 flex items-center justify-center backdrop-blur-sm rounded-full transition-all duration-300"
+        :class="buttonClasses"
       >
         <div class="flex flex-col items-center justify-center space-y-1">
           <span 
-            class="w-5 h-0.5 bg-white transition-all duration-300"
-            :class="{ 'rotate-45 translate-y-1/2': isMenuOpen }"
+            class="w-5 h-0.5 transition-all duration-300"
+            :class="lineClasses"
+            :style="{ transform: isMenuOpen ? 'rotate(45deg) translateY(2px)' : 'none' }"
           ></span>
           <span 
-            class="w-5 h-0.5 bg-white transition-all duration-300"
-            :class="{ 'opacity-0': isMenuOpen }"
+            class="w-5 h-0.5 transition-all duration-300"
+            :class="lineClasses"
+            :style="{ opacity: isMenuOpen ? 0 : 1 }"
           ></span>
           <span 
-            class="w-5 h-0.5 bg-white transition-all duration-300"
-            :class="{ '-rotate-45 -translate-y-1/2': isMenuOpen }"
+            class="w-5 h-0.5 transition-all duration-300"
+            :class="lineClasses"
+            :style="{ transform: isMenuOpen ? 'rotate(-45deg) translateY(-2px)' : 'none' }"
           ></span>
         </div>
       </button>
@@ -180,6 +184,64 @@ const activeTab = ref<string>('contact') // Onglet contact par défaut
 const route = useRoute()
 const isHomePage = computed(() => route.path === '/' || route.path === '/index')
 
+// Détection automatique de la couleur du fond
+const isDarkBackground = ref(true)
+const backgroundLuminance = ref(0)
+
+// Fonction pour détecter la couleur du fond
+const detectBackgroundColor = () => {
+  if (process.client) {
+    // Détecter la couleur du fond de la page
+    const body = document.body
+    const computedStyle = window.getComputedStyle(body)
+    const backgroundColor = computedStyle.backgroundColor
+    
+    // Convertir RGB en luminosité
+    const rgb = backgroundColor.match(/\d+/g)
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0])
+      const g = parseInt(rgb[1])
+      const b = parseInt(rgb[2])
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+      backgroundLuminance.value = luminance
+      isDarkBackground.value = luminance < 0.5
+    }
+  }
+}
+
+// Classes conditionnelles basées sur la couleur du fond
+const logoImage = computed(() => {
+  const luminance = backgroundLuminance.value
+  
+  if (luminance < 0.3) {
+    // Fond très sombre - utiliser PYOH-07 (optimisé pour les fonds sombres)
+    return '/images/Logos Pyoh-07.png'
+  } else if (luminance < 0.7) {
+    // Fond intermédiaire - utiliser PYOH-06 (polyvalent)
+    return '/images/Logos Pyoh-06.png'
+  } else {
+    // Fond clair - utiliser PYOH-04 (optimisé pour les fonds clairs)
+    return '/images/Logos Pyoh-04.png'
+  }
+})
+
+const logoClasses = computed(() => {
+  // Plus besoin de filtres CSS car on utilise les bons logos
+  return ''
+})
+
+const buttonClasses = computed(() => {
+  if (isDarkBackground.value) {
+    return `bg-white/20 border-white/30 hover:bg-white/30 ${isMenuOpen.value ? 'bg-white/40' : ''}`
+  } else {
+    return `bg-black/20 border-black/30 hover:bg-black/30 ${isMenuOpen.value ? 'bg-black/40' : ''}`
+  }
+})
+
+const lineClasses = computed(() => {
+  return isDarkBackground.value ? 'bg-white' : 'bg-black'
+})
+
 // Items de navigation
 const menuItems = [
   { path: '/', label: 'Home' },
@@ -199,6 +261,35 @@ const toggleMenu = () => {
 const closeMenu = () => {
   isMenuOpen.value = false
 }
+
+// Détection automatique au montage et au changement de route
+onMounted(() => {
+  detectBackgroundColor()
+  
+  // Observer les changements de couleur de fond
+  const observer = new MutationObserver(detectBackgroundColor)
+  observer.observe(document.body, { 
+    attributes: true, 
+    attributeFilter: ['class', 'style'] 
+  })
+  
+  // Gestionnaire d'événement pour le redimensionnement
+  window.addEventListener('resize', detectBackgroundColor)
+  
+  // Gestionnaire d'événement pour le scroll (si nécessaire)
+  window.addEventListener('scroll', detectBackgroundColor)
+  
+  // Gestionnaire d'événement pour les changements de route
+  window.addEventListener('popstate', detectBackgroundColor)
+  
+  // Nettoyage
+  onUnmounted(() => {
+    observer.disconnect()
+    window.removeEventListener('resize', detectBackgroundColor)
+    window.removeEventListener('scroll', detectBackgroundColor)
+    window.removeEventListener('popstate', detectBackgroundColor)
+  })
+})
 
 // Fermer le menu avec la touche Escape
 onMounted(() => {

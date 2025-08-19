@@ -156,13 +156,6 @@
             </button>
           </div>
         </div>
-
-        <!-- Bouton Load More style Nicex -->
-        <div v-if="filteredProjects.length > 0" class="text-center mt-16">
-          <button class="px-8 py-4 bg-gray-900 text-white font-light rounded-none hover:bg-gray-800 transition-all duration-300 tracking-widest uppercase text-sm">
-            Load More
-          </button>
-        </div>
       </div>
     </section>
   </div>

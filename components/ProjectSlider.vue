@@ -56,7 +56,7 @@
 
           <!-- Contenu du projet - Textes repositionnés -->
           <div class="relative z-10 h-full flex items-end">
-            <div class="container mx-auto px-8 pb-32">
+            <div class="px-8 pb-32">
               <div class="max-w-4xl">
                 <!-- Catégorie -->
                 <div class="mb-4">
