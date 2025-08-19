@@ -46,17 +46,22 @@ const isDark = ref(true)
 
 // Fonction pour basculer le thème
 const toggleTheme = () => {
+  console.log('🔄 Toggle theme appelé')
+  console.log('📊 État avant:', isDark.value)
   isDark.value = !isDark.value
+  console.log('📊 État après:', isDark.value)
   updateTheme()
 }
 
 // Fonction pour mettre à jour le thème
 const updateTheme = () => {
   const theme = isDark.value ? 'dark' : 'light'
+  console.log('🎨 Mise à jour du thème:', theme)
   document.documentElement.setAttribute('data-theme', theme)
   
   // Sauvegarder dans le localStorage
   localStorage.setItem('pyoh-theme', theme)
+  console.log('💾 Thème sauvegardé dans localStorage:', theme)
 }
 
 // Fonction pour initialiser le thème
@@ -107,6 +112,10 @@ watch(isDark, () => {
 /* Styles spécifiques au composant */
 .theme-toggle {
   backdrop-filter: blur(10px);
+  /* Style temporaire pour debug */
+  background-color: red !important;
+  border: 3px solid yellow !important;
+  z-index: 9999;
 }
 
 .theme-toggle svg {
