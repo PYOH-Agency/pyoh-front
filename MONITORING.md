@@ -1,12 +1,11 @@
 # 🚀 Guide de Configuration du Monitoring
 
-Ce template inclut un système de monitoring complet avec Sentry, Google Analytics, Uptime Robot et Grafana.
+Ce template inclut un système de monitoring complet avec Sentry, Uptime Robot et Grafana.
 
 ## 📋 Prérequis
 
 - Node.js 18+ et npm/yarn
 - Compte Sentry (gratuit)
-- Compte Google Analytics 4
 - Compte Uptime Robot (gratuit)
 - Instance Grafana (locale ou cloud)
 
@@ -41,9 +40,6 @@ NUXT_PUBLIC_SENTRY_DSN=https://votre-dsn@sentry.io/project-id
 NUXT_PUBLIC_SENTRY_ENVIRONMENT=production
 NUXT_PUBLIC_SENTRY_RELEASE=1.0.0
 
-# Google Analytics
-NUXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-
 # Uptime Robot
 NUXT_PUBLIC_UPTIME_ROBOT_API_KEY=votre_api_key
 NUXT_PUBLIC_UPTIME_ROBOT_MONITOR_ID=votre_monitor_id
@@ -72,13 +68,6 @@ Puis allez sur `http://localhost:3000/sentry-test`
 - ✅ Breadcrumbs pour tracer les actions utilisateur
 - ✅ Intégration native avec Nuxt 3
 
-### **Google Analytics 4 - Analytics**
-- ✅ Suivi automatique des pages vues
-- ✅ Suivi des événements utilisateur
-- ✅ Suivi de la profondeur de défilement
-- ✅ Suivi des performances
-- ✅ Suivi des exceptions
-
 ### **Uptime Robot - Disponibilité**
 - ✅ Vérification de la disponibilité du site
 - ✅ Alertes automatiques en cas de problème
@@ -98,9 +87,8 @@ Puis allez sur `http://localhost:3000/sentry-test`
 // Dans vos composants
 const { 
   initializeMonitoring, 
-  trackEvent, 
-  captureError, 
-  setUser 
+  trackError, 
+  trackPerformance 
 } = useMonitoring()
 
 // Initialiser le monitoring
@@ -108,114 +96,101 @@ onMounted(() => {
   initializeMonitoring()
 })
 
-// Tracker un événement
-trackEvent('button_click', { 
-  button: 'cta', 
-  page: 'home' 
-})
-
-// Capturer une erreur
-try {
-  // Votre code
-} catch (error) {
-  captureError(error, { context: 'user_action' })
+// Tracker une erreur
+const handleError = (error: Error) => {
+  trackError(error, {
+    context: 'user-action',
+    userId: user.id
+  })
 }
-
-// Définir l'utilisateur
-setUser('user123', { 
-  email: 'user@example.com',
-  plan: 'premium' 
-})
 ```
 
-### **Interception Globale des Erreurs**
+### **Monitoring des Performances**
 
 ```typescript
-// Dans app.vue
-const { captureError } = useMonitoring()
-
-// Intercepter les erreurs globales
-onErrorCaptured((error, instance, info) => {
-  captureError(error, { 
-    component: instance?.$options.name,
-    info 
-  })
-})
+// Tracker les métriques de performance
+const trackPagePerformance = () => {
+  if ('performance' in window) {
+    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+    
+    trackPerformance({
+      pageLoadTime: navigation.loadEventEnd - navigation.loadEventStart,
+      domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+      firstPaint: performance.getEntriesByName('first-paint')[0]?.startTime || 0
+    })
+  }
+}
 ```
 
 ## 🧪 Tests et Vérification
 
-### **Page de Test Sentry**
-- Route : `/sentry-test`
-- Fonctionnalités :
-  - Test des erreurs
-  - Test des performances
-  - Vérification de la configuration
-  - Logs en temps réel
+### **Test Sentry**
 
-### **Vérification Sentry**
-1. Cliquez sur "Trigger Test Error"
-2. Vérifiez que l'erreur apparaît dans votre dashboard Sentry
-3. Vérifiez les breadcrumbs et le contexte
+1. Visitez `/sentry-test`
+2. Cliquez sur "Test Error" pour déclencher une erreur
+3. Vérifiez que l'erreur apparaît dans votre dashboard Sentry
 
-### **Vérification Google Analytics**
-1. Ouvrez les DevTools
-2. Allez dans l'onglet Network
-3. Vérifiez les requêtes vers Google Analytics
+### **Vérification Uptime Robot**
 
-## 📈 Dashboard Grafana
+1. Configurez votre monitor dans Uptime Robot
+2. Vérifiez que les pings arrivent correctement
+3. Testez les alertes en arrêtant temporairement votre serveur
 
-### **Métriques Collectées**
-- **Performance** : Web Vitals, temps de chargement
-- **Erreurs** : Fréquence, types, pages affectées
-- **Utilisateurs** : Comportement, interactions
-- **Disponibilité** : Statut Uptime Robot
-- **Navigation** : Pages vues, parcours utilisateur
+### **Vérification Grafana**
 
-### **Panels Recommandés**
-1. **Vue d'ensemble** : Métriques clés, statut des services
-2. **Performance** : Web Vitals, temps de réponse
-3. **Erreurs** : Fréquence, types, tendances
-4. **Utilisateurs** : Sessions, pages populaires
-5. **Disponibilité** : Uptime, temps de réponse
+1. Accédez à votre instance Grafana
+2. Vérifiez que les métriques sont collectées
+3. Testez les alertes et notifications
 
 ## 🔍 Dépannage
 
 ### **Sentry ne fonctionne pas**
-- Vérifiez que le DSN est correct
-- Vérifiez que les fichiers de config Sentry sont présents
-- Vérifiez la console pour les erreurs
 
-### **Google Analytics ne fonctionne pas**
-- Vérifiez l'ID de mesure
-- Vérifiez que le module est installé
-- Vérifiez les DevTools pour les requêtes
+1. Vérifiez que votre DSN est correct
+2. Assurez-vous que l'environnement est configuré
+3. Vérifiez les erreurs dans la console du navigateur
+4. Consultez la [documentation Sentry](https://docs.sentry.io/platforms/javascript/)
 
-### **Grafana ne reçoit pas de données**
-- Vérifiez l'URL et l'API key
-- Vérifiez que InfluxDB est configuré
-- Vérifiez les logs de Grafana
+### **Uptime Robot ne répond pas**
 
-## 📚 Ressources Utiles
+1. Vérifiez votre clé API
+2. Assurez-vous que l'URL du monitor est correcte
+3. Vérifiez les logs de votre serveur
 
-- [Documentation Sentry Nuxt](https://docs.sentry.io/platforms/javascript/guides/nuxt/)
-- [Documentation Google Analytics 4](https://developers.google.com/analytics/devguides/collection/ga4)
-- [Documentation Uptime Robot API](https://uptimerobot.com/api)
+### **Grafana n'affiche pas de données**
+
+1. Vérifiez la configuration de la source de données
+2. Assurez-vous que les métriques sont envoyées
+3. Vérifiez les permissions d'accès
+
+## 📚 Ressources
+
+- [Documentation Sentry](https://docs.sentry.io/platforms/javascript/)
+- [Documentation Uptime Robot](https://uptimerobot.com/api/)
 - [Documentation Grafana](https://grafana.com/docs/)
+- [Nuxt 3 Monitoring](https://nuxt.com/docs/guide/concepts/auto-imports#monitoring)
 
 ## 🚀 Déploiement
 
-### **Variables d'environnement de production**
+### **Variables de Production**
+
+Assurez-vous de configurer ces variables dans votre plateforme de déploiement :
+
 ```bash
+NODE_ENV=production
+NUXT_PUBLIC_SENTRY_DSN=votre_dsn_production
 NUXT_PUBLIC_SENTRY_ENVIRONMENT=production
-NUXT_PUBLIC_SENTRY_RELEASE=1.0.0
-NUXT_PUBLIC_GA_DEBUG_MODE=false
+NUXT_PUBLIC_UPTIME_ROBOT_API_KEY=votre_api_key_production
+NUXT_PUBLIC_GRAFANA_URL=votre_url_grafana_production
 ```
 
-### **Build et déploiement**
-```bash
-npm run build
-npm run preview
-```
+### **Vérification Post-Déploiement**
 
-Le monitoring est maintenant prêt pour la production ! 🎉
+1. Testez le monitoring sur l'environnement de production
+2. Vérifiez que les métriques sont collectées
+3. Testez les alertes et notifications
+4. Validez la configuration Sentry
+
+---
+
+**Note :** Ce template est configuré pour fonctionner sans analytics tiers, se concentrant uniquement sur le monitoring des erreurs, des performances et de la disponibilité.

@@ -1,0 +1,199 @@
+<template>
+  <div class="min-h-screen bg-black text-white">
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-8">
+      <div class="max-w-6xl mx-auto text-center">
+        <h1 class="text-6xl md:text-8xl font-bold mb-8 animate-fade-in-up">
+          PYOH Agency
+        </h1>
+        <p class="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 0.1s;">
+          Agence créative spécialisée dans la conception de sites web, l'identité visuelle et l'expérience utilisateur.
+        </p>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="py-20 px-8">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-4xl font-bold text-center mb-16 animate-fade-in-up">Nos Services</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="card p-8 animate-fade-in-up" style="animation-delay: 0.1s;">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">Sites Web</h3>
+            <p class="text-white/70 leading-relaxed">
+              Création de sites web modernes, responsifs et optimisés pour une expérience utilisateur exceptionnelle.
+            </p>
+          </div>
+
+          <div class="card p-8 animate-fade-in-up" style="animation-delay: 0.2s;">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">E-commerce</h3>
+            <p class="text-white/70 leading-relaxed">
+              Développement de boutiques en ligne performantes avec des solutions de paiement sécurisées.
+            </p>
+          </div>
+
+          <div class="card p-8 animate-fade-in-up" style="animation-delay: 0.3s;">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">Identité Visuelle</h3>
+            <p class="text-white/70 leading-relaxed">
+              Création de logos, chartes graphiques et supports de communication cohérents.
+            </p>
+          </div>
+
+          <div class="card p-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">UI/UX Design</h3>
+            <p class="text-white/70 leading-relaxed">
+              Conception d'interfaces intuitives et d'expériences utilisateur engageantes.
+            </p>
+          </div>
+
+          <div class="card p-8 animate-fade-in-up" style="animation-delay: 0.5s;">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">Marketing Digital</h3>
+            <p class="text-white/70 leading-relaxed">
+              Stratégies de marketing digital et campagnes publicitaires ciblées.
+            </p>
+          </div>
+
+          <div class="card p-8 animate-fade-in-up" style="animation-delay: 0.6s;">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">Maintenance</h3>
+            <p class="text-white/70 leading-relaxed">
+              Services de maintenance, mises à jour et support technique continu.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Approche -->
+    <section class="py-20 px-8 bg-white/5">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-4xl font-bold text-center mb-16 animate-fade-in-up">Notre Approche</h2>
+        
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div class="space-y-6 animate-fade-in-left">
+            <div class="flex items-start space-x-4">
+              <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-bold text-sm">1</div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">Découverte</h3>
+                <p class="text-white/70">Nous prenons le temps de comprendre vos besoins, objectifs et contraintes.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+              <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-bold text-sm">2</div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">Stratégie</h3>
+                <p class="text-white/70">Nous élaborons une stratégie personnalisée pour atteindre vos objectifs.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+              <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-bold text-sm">3</div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">Création</h3>
+                <p class="text-white/70">Nous créons votre projet avec attention aux détails et qualité.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+              <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-bold text-sm">4</div>
+              <div>
+                <h3 class="text-xl font-bold mb-2">Livraison</h3>
+                <p class="text-white/70">Nous livrons votre projet et assurons le suivi post-lancement.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="animate-fade-in-right">
+            <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-8">
+              <h3 class="text-2xl font-bold mb-4">Pourquoi PYOH ?</h3>
+              <ul class="space-y-3 text-white/80">
+                <li class="flex items-center space-x-3">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>Expertise technique avancée</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>Design créatif et moderne</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>Support client réactif</span>
+                </li>
+                <li class="flex items-center space-x-3">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>Livraison dans les délais</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 px-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-6 animate-fade-in-up">Prêt à démarrer votre projet ?</h2>
+        <p class="text-xl text-white/70 mb-8 animate-fade-in-up" style="animation-delay: 0.1s;">
+          Contactez-nous pour discuter de vos besoins et obtenir un devis personnalisé.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style="animation-delay: 0.2s;">
+          <NuxtLink to="/contact" class="btn-primary">
+            Nous contacter
+          </NuxtLink>
+          <button class="btn-secondary">
+            Voir nos réalisations
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+// Configuration de la page
+useHead({
+  title: 'PYOH Agency - Agence Créative',
+  meta: [
+    { name: 'description', content: 'PYOH Agency - Agence créative spécialisée dans la conception de sites web, l\'identité visuelle et l\'expérience utilisateur.' }
+  ]
+})
+</script>

@@ -92,10 +92,7 @@ NUXT_PUBLIC_STRAPI_TOKEN=votre_token_strapi
 NUXT_PUBLIC_SENTRY_DSN=votre_sentry_dsn
 NUXT_PUBLIC_SENTRY_ENVIRONMENT=production
 
-# Analytics (remplacez par vos vrais IDs)
-NUXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-NUXT_PUBLIC_PLAUSIBLE_DOMAIN=votre-domaine.com
-NUXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+# Analytics désactivé pour ce projet
 
 # Uptime Robot
 NUXT_PUBLIC_UPTIME_ROBOT_API_KEY=votre_api_key
@@ -142,7 +139,7 @@ Le projet est déjà configuré avec :
 1. **Page d'accueil** : Chargement et contenu
 2. **Navigation** : Toutes les pages accessibles
 3. **Formulaires** : Envoi des données
-4. **Monitoring** : Sentry, Analytics, Uptime Robot
+4. **Monitoring** : Sentry, Uptime Robot
 5. **Performance** : Core Web Vitals
 6. **Mobile** : Responsivité et PWA
 
@@ -223,9 +220,8 @@ npm run build
 - **Sessions** utilisateur
 
 ### **Analytics :**
-- **Visiteurs** et comportement
-- **Pages** populaires
-- **Conversions** et objectifs
+- **Analytics désactivé** pour ce projet
+- **Focus** sur le monitoring des erreurs et performances
 
 ### **Uptime Robot :**
 - **Disponibilité** 24h/24
@@ -236,7 +232,7 @@ npm run build
 
 Après le déploiement :
 
-1. **Configurez** vos analytics (GA4, Plausible)
+1. **Analytics désactivé** pour ce projet
 2. **Testez** Uptime Robot en production
 3. **Optimisez** les performances
 4. **Configurez** un domaine personnalisé

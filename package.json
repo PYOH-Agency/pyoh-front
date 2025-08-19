@@ -1,14 +1,23 @@
 {
-  "name": "template-nuxt-front",
+  "name": "pyoh-website",
   "version": "1.0.0",
-  "description": "Template Nuxt 3 avec intégration Strapi et monitoring complet",
+  "description": "Site web PYOH - Agence digitale",
   "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy": "./deploy.sh",
+    "deploy:vercel": "vercel --prod",
+    "deploy:preview": "vercel",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "type-check": "nuxt typecheck",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
@@ -19,10 +28,7 @@
   "dependencies": {
     "@nuxtjs/strapi": "^1.9.0",
     "@pinia/nuxt": "^0.5.1",
-    "pinia": "^2.1.7",
-    "@sentry/nuxt": "^3.0.0",
-    "@nuxtjs/google-analytics": "^3.0.0",
-    "web-vitals": "^3.5.0"
+    "gsap": "^3.13.0",
+    "pinia": "^2.1.7"
   }
 }
-
