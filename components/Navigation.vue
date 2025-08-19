@@ -29,14 +29,6 @@
       <CalFloatingButton />
     </div>
 
-    <!-- Informations client et année (bas droite) -->
-    <div class="absolute bottom-6 right-6 pointer-events-auto">
-      <div class="text-right">
-        <p v-if="currentProjectClient" class="text-white/60 text-sm font-medium">{{ currentProjectClient }}</p>
-        <p v-if="currentProjectYear" class="text-white/40 text-xs">{{ currentProjectYear }}</p>
-      </div>
-    </div>
-
     <!-- Menu plein écran -->
     <Transition
       enter-active-class="transition-all duration-700 ease-out"
@@ -179,40 +171,17 @@ import { useRoute } from 'vue-router'
 const isMenuOpen = ref(false)
 const activeTab = ref<string>('contact') // Onglet contact par défaut
 
-// État du projet actuel
-const currentProjectClient = ref<string | null>(null)
-const currentProjectYear = ref<number | null>(null)
-
-// Année courante
-const currentYear = computed(() => new Date().getFullYear())
-
 // Vérifier si on est sur la page home
 const route = useRoute()
 const isHomePage = computed(() => route.path === '/' || route.path === '/index')
 
 // Items de navigation
 const menuItems = [
-  { label: 'Home', path: '/' },
-  { label: 'Portfolio', path: '/portfolio' },
-  { label: 'PYOH Agency', path: '/agency' },
-  { label: 'Contact', path: '/contact' }
+  { path: '/', label: 'Home' },
+  { path: '/portfolio', label: 'Portfolio' },
+  { path: '/about', label: 'À propos' },
+  { path: '/contact', label: 'Contact' }
 ]
-
-// Écouter les changements de projet depuis le ProjectSlider
-const listenToProjectChanges = () => {
-  // Créer un événement personnalisé pour écouter les changements de projet
-  const handleProjectChange = (event: CustomEvent) => {
-    const { client, year } = event.detail
-    currentProjectClient.value = client
-    currentProjectYear.value = year
-  }
-  
-  window.addEventListener('project-change', handleProjectChange as EventListener)
-  
-  return () => {
-    window.removeEventListener('project-change', handleProjectChange as EventListener)
-  }
-}
 
 // Méthodes
 const toggleMenu = () => {
@@ -236,12 +205,8 @@ onMounted(() => {
   
   document.addEventListener('keydown', handleEscape)
   
-  // Écouter les changements de projet
-  const cleanup = listenToProjectChanges()
-  
   onUnmounted(() => {
     document.removeEventListener('keydown', handleEscape)
-    cleanup()
   })
 })
 </script>

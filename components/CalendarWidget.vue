@@ -6,21 +6,6 @@
       <p class="text-white/60">Planifiez un appel de découverte pour votre projet</p>
     </div>
 
-    <!-- Informations sur l'appel -->
-    <div class="bg-white/5 border border-white/10 rounded-lg p-4">
-      <div class="flex items-start space-x-3">
-        <div class="flex-shrink-0 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-          </svg>
-        </div>
-        <div>
-          <h4 class="text-white font-medium">Appel de découverte</h4>
-          <p class="text-white/60 text-sm">30 minutes pour comprendre vos besoins et objectifs</p>
-        </div>
-      </div>
-    </div>
-
     <!-- Cal.com Widget -->
     <div class="relative bg-white/5 border border-white/10 rounded-lg overflow-hidden">
       <iframe
@@ -51,7 +36,7 @@
     <!-- Informations supplémentaires -->
     <div class="text-center text-sm text-white/40">
       <p>Vous recevrez un email de confirmation avec le lien de l'appel</p>
-      <p class="mt-1">Questions ? Contactez-nous à hello@pyoh.agency</p>
+      <p class="mt-1">Questions ? Contactez-nous à contact@pyoh.fr</p>
     </div>
   </div>
 </template>

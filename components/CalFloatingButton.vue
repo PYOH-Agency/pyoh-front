@@ -42,8 +42,8 @@ onMounted(() => {
     "calLink":"paul-bugeon-el1oht/kick-off-de-votre-projet",
     "config":{"layout":"month_view","theme":"dark"},
     "buttonTextColor":"#fddb00",
-    "buttonText":"",
-    "buttonOpacity": 0.4
+    "buttonText":"Rendez-vous"
+    
   }); 
   
   Cal.ns["kick-off-de-votre-projet"]("ui", {

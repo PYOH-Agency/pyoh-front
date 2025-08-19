@@ -270,11 +270,40 @@ const getProjectSubtitle = (project) => {
 }
 
 const getProjectCategory = (project) => {
-  // Structure Strapi directe
-  if (project.type) return project.type
-  // Structure transformée
-  if (project.attributes?.category) return project.attributes.category
-  return 'Catégorie manquante'
+  // Nouvelle structure avec types multiples
+  if (project?.project_types && Array.isArray(project.project_types) && project.project_types.length > 0) {
+    // Si plusieurs types, les afficher tous
+    if (project.project_types.length > 1) {
+      return project.project_types.map(type => type.label).join(' • ')
+    }
+    // Sinon, retourner le premier type
+    return project.project_types[0].label
+  }
+  
+  // Structure Strapi avec attributes
+  if (project?.attributes?.project_types && Array.isArray(project.attributes.project_types) && project.attributes.project_types.length > 0) {
+    // Si plusieurs types, les afficher tous
+    if (project.attributes.project_types.length > 1) {
+      return project.attributes.project_types.map(type => type.label).join(' • ')
+    }
+    // Sinon, retourner le premier type
+    return project.attributes.project_types[0].label
+  }
+  
+  // Fallback vers l'ancienne structure
+  if (project?.type) return project.type
+  if (project?.attributes?.type) return project.attributes.type
+  if (project?.attributes?.category && project.attributes.category !== 'Projet') return project.attributes.category
+  
+  // Si on a un media vidéo, on peut déduire que c'est un projet vidéo
+  if (project?.media?.data?.attributes?.mime?.startsWith('video/') || 
+      project?.attributes?.media?.data?.attributes?.mime?.startsWith('video/')) {
+    return 'Vidéo'
+  }
+  
+  // Sinon, on affiche "Projet" mais on log pour debug
+  console.log('🔍 Projet sans type détecté:', project)
+  return 'Projet'
 }
 
 const getProjectMedia = (project) => {
