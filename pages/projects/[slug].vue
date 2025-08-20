@@ -76,65 +76,69 @@
               >
                 Galerie
               </button>
-              <button
-                @click="activeTab = 'videos'"
-                class="px-6 py-3 text-sm font-medium transition-all duration-300"
-                :class="activeTab === 'videos' 
-                  ? 'bg-white text-gray-900 shadow-sm' 
-                  : 'text-gray-600 hover:text-gray-900'"
-              >
-                Vidéos
-              </button>
+                          <button 
+              v-if="project.url_videos && project.url_videos.length > 0"
+              @click="activeTab = 'videos'"
+              class="px-6 py-3 text-sm font-medium transition-all duration-300"
+              :class="activeTab === 'videos' 
+                ? 'bg-white text-gray-900 shadow-sm' 
+                : 'text-gray-900 shadow-sm'"
+            >
+              Vidéos
+            </button>
             </div>
           </div>
 
           <!-- Contenu des onglets -->
           <div v-if="activeTab === 'gallery'" class="space-y-8">
             <!-- Galerie en maçonnerie des images -->
-            <div class="columns-1 md:columns-2 lg:columns-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-auto">
               <div 
                 v-for="(media, index) in imageMedia" 
                 :key="media.id"
-                class="break-inside-avoid mb-8 group cursor-pointer"
                 @click="openLightbox(index)"
+                class="cursor-pointer group overflow-hidden rounded-lg shadow-lg relative"
+                :class="getImageGridClass(media, index)"
               >
-                <div class="relative overflow-hidden bg-gray-50">
-                  <img 
-                    :src="strapiMediaUrl(media.url)"
-                    :alt="media.name || `Image ${index + 1}`"
-                    class="w-full h-auto transition-all duration-500 group-hover:scale-105"
-                  />
-                  <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                    <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                    </svg>
-                  </div>
+                <img 
+                  :src="strapiMediaUrl(media.url)"
+                  :alt="media.name || `Image ${index + 1}`"
+                  class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                  </svg>
                 </div>
               </div>
             </div>
           </div>
 
           <div v-else-if="activeTab === 'videos'" class="space-y-8">
-            <!-- Galerie des vidéos -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Galerie des vidéos Vimeo -->
+            <div v-if="project.url_videos && project.url_videos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div 
-                v-for="(video, index) in videoMedia" 
-                :key="video.id"
-                class="bg-gray-50 p-4"
+                v-for="(videoUrl, index) in project.url_videos" 
+                :key="index"
+                class="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
               >
-                <video 
-                  :src="strapiMediaUrl(video.url)"
-                  :poster="video.thumbnail ? strapiMediaUrl(video.thumbnail) : undefined"
-                  class="w-full h-auto"
-                  controls
-                  preload="metadata"
-                >
-                  Votre navigateur ne supporte pas la lecture de vidéos.
-                </video>
-                <p v-if="video.name" class="mt-3 text-sm text-gray-600 text-center">
-                  {{ video.name }}
+                <div class="relative pb-[56.25%] bg-gray-100 rounded-lg overflow-hidden">
+                  <iframe 
+                    :src="getVimeoEmbedUrl(videoUrl.url)"
+                    class="absolute inset-0 w-full h-full"
+                    frameborder="0"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+                <p class="mt-3 text-sm text-gray-600 text-center">
+                  {{ videoUrl.name || `Vidéo ${index + 1}` }}
                 </p>
               </div>
+            </div>
+            <div v-else class="text-center py-12">
+              <p class="text-gray-500 text-lg">Aucune vidéo disponible pour ce projet</p>
             </div>
           </div>
         </div>
@@ -234,6 +238,15 @@ const activeTab = ref('gallery')
 const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
 
+// Définir l'onglet actif par défaut
+const setDefaultActiveTab = () => {
+  if (project.value?.url_videos && project.value.url_videos.length > 0) {
+    activeTab.value = 'videos'
+  } else {
+    activeTab.value = 'gallery'
+  }
+}
+
 // Configuration
 const config = useRuntimeConfig()
 const strapiUrl = config.public.strapiUrl
@@ -293,56 +306,119 @@ const fetchProject = async () => {
     error.value = null
     
     const slug = route.params.slug
+    console.log('🔍 Page dynamique - Slug recherché:', slug)
     
     // Essayer de récupérer le projet par slug (titre transformé)
     let projectFound = false
     
     // Récupérer tous les projets pour chercher par titre
-    const allProjectsResponse = await $fetch(`${strapiUrl}/api/projects?populate=*`)
+    console.log('📡 Récupération de tous les projets...')
+                const allProjectsResponse = await $fetch(`${strapiUrl}/api/projects?populate[url_videos][populate]=*`)
+    console.log('📦 Réponse Strapi:', allProjectsResponse)
     
     if (allProjectsResponse.data && allProjectsResponse.data.length > 0) {
+      console.log('📋 Nombre de projets trouvés:', allProjectsResponse.data.length)
+      
       // Chercher par slug (titre transformé)
       const projectBySlug = allProjectsResponse.data.find(proj => {
         const projectSlug = createSlug(proj.title)
+        console.log(`🔍 Comparaison: "${projectSlug}" vs "${slug}" pour "${proj.title}"`)
         return projectSlug === slug
       })
       
       if (projectBySlug) {
+        console.log('✅ Projet trouvé par slug:', projectBySlug)
         project.value = projectBySlug
         projectFound = true
+        setDefaultActiveTab()
       } else {
+        console.log('❌ Aucun projet trouvé par slug')
+        
         // Fallback : essayer par ID si le slug est un nombre
         if (!isNaN(slug)) {
-          const idResponse = await $fetch(`${strapiUrl}/api/projects/${slug}?populate=*`)
-          if (idResponse.data) {
-            project.value = idResponse.data
-            projectFound = true
-          }
+          console.log('🔄 Tentative de récupération par ID:', slug)
+                            const idResponse = await $fetch(`${strapiUrl}/api/projects/${slug}?populate[url_videos][populate]=*`)
+                            if (idResponse.data) {
+                    console.log('✅ Projet trouvé par ID:', idResponse.data)
+                    project.value = idResponse.data
+                    projectFound = true
+                    setDefaultActiveTab()
+                  }
         }
       }
     }
     
     if (!projectFound) {
+      console.log('❌ Aucun projet trouvé - affichage de l\'erreur')
       error.value = 'Projet non trouvé'
     }
     
   } catch (err) {
-    console.error('Erreur lors de la récupération du projet:', err)
+    console.error('❌ Erreur lors de la récupération du projet:', err)
     error.value = 'Erreur lors du chargement du projet'
   } finally {
     loading.value = false
   }
 }
 
+
+
+// Fonction pour convertir une URL Vimeo en URL d'embed
+const getVimeoEmbedUrl = (vimeoUrl) => {
+  if (!vimeoUrl) return ''
+  
+  // Extraire l'ID de la vidéo Vimeo
+  const vimeoId = vimeoUrl.match(/vimeo\.com\/(\d+)/)?.[1]
+  if (vimeoId) {
+    return `https://player.vimeo.com/video/${vimeoId}?h=hash&dnt=1&title=0&byline=0&portrait=0`
+  }
+  
+  // Si ce n'est pas une URL Vimeo valide, retourner l'URL d'origine
+  return vimeoUrl
+}
+
+// Fonction pour créer des classes CSS variables pour l'effet maçonnerie
+const getImageGridClass = (media, index) => {
+  // Créer des tailles variables basées sur l'index pour l'effet maçonnerie
+  const heightClasses = [
+    'row-span-1', // Hauteur normale
+    'row-span-2', // Hauteur double
+    'row-span-1', // Hauteur normale
+    'row-span-3', // Hauteur triple
+    'row-span-2', // Hauteur double
+    'row-span-1', // Hauteur normale
+  ]
+  
+  // Alterner entre différentes largeurs pour plus de variété
+  const widthClasses = [
+    'col-span-1', // Largeur normale
+    'col-span-1', // Largeur normale
+    'col-span-2', // Largeur double (sur 2 colonnes)
+    'col-span-1', // Largeur normale
+    'col-span-1', // Largeur normale
+    'col-span-2', // Largeur double
+  ]
+  
+  const heightClass = heightClasses[index % heightClasses.length]
+  const widthClass = widthClasses[index % widthClasses.length]
+  
+  return `${heightClass} ${widthClass}`
+}
+
 // Helper function pour créer un slug
 const createSlug = (title) => {
   if (!title) return ''
-  return title
+  console.log('🔍 Création du slug pour:', title)
+  
+  const slug = title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
-    .trim('-')
+    .replace(/^-+|-+$/g, '') // Corriger trim('-') qui n'existe pas
+  
+  console.log('📝 Slug généré:', slug)
+  return slug
 }
 
 // Lifecycle
@@ -360,17 +436,27 @@ useHead({
 </script>
 
 <style scoped>
-/* Styles pour la galerie en maçonnerie */
-.columns-1 { column-count: 1; }
-.columns-2 { column-count: 2; }
-.columns-3 { column-count: 3; }
+/* Styles pour la galerie en maçonnerie avec grille CSS */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-auto-rows: 200px;
+  grid-auto-flow: dense;
+}
 
+/* Responsive grid */
 @media (max-width: 768px) {
-  .columns-2, .columns-3 { column-count: 1; }
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-auto-rows: 150px;
+  }
 }
 
 @media (max-width: 1024px) {
-  .columns-3 { column-count: 2; }
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-auto-rows: 180px;
+  }
 }
 
 /* Animation d'entrée */
