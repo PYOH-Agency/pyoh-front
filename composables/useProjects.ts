@@ -26,7 +26,7 @@ export const useProjects = () => {
       error.value = null
 
       const response = await find<ProjectsResponse>('projects', {
-        populate: options?.populate || ['media', 'coverPicture', 'project_types'],
+        populate: options?.populate || ['media', 'homeMedia', 'coverPicture', 'project_types'],
         sort: options?.sort || ['createdAt:desc'],
         filters: options?.filters || {},
         pagination: options?.pagination || { page: 1, pageSize: 100 }
@@ -54,7 +54,7 @@ export const useProjects = () => {
       const strapiUrl = config.public.strapiUrl || 'http://localhost:1337'
       
       // Essayer avec $fetch directement
-      const url = `${strapiUrl}/api/projects?populate[0]=coverPicture&populate[1]=media&populate[2]=project_types&filters[featured][$eq]=true&sort=createdAt:desc&pagination[pageSize]=10`
+      const url = `${strapiUrl}/api/projects?populate[0]=coverPicture&populate[1]=media&populate[2]=homeMedia&populate[3]=project_types&filters[featured][$eq]=true&sort=createdAt:desc&pagination[pageSize]=10`
       
       const response = await $fetch(url)
       
@@ -83,6 +83,19 @@ export const useProjects = () => {
                 }
               }
             } : null,
+            homeMedia: item.homeMedia && item.homeMedia.length > 0 ? {
+              data: {
+                id: item.homeMedia[0].id,
+                attributes: {
+                  url: item.homeMedia[0].url,
+                  name: item.homeMedia[0].name || item.title,
+                  width: item.homeMedia[0].width,
+                  height: item.homeMedia[0].height,
+                  ext: item.homeMedia[0].ext,
+                  mime: item.homeMedia[0].mime
+                }
+              }
+            } : null,
             createdAt: item.createdAt,
             updatedAt: item.updatedAt
           }
@@ -95,7 +108,7 @@ export const useProjects = () => {
 
         
         // Si aucun projet featured, récupérer les 3 premiers projets
-        const allUrl = `${strapiUrl}/api/projects?populate[0]=coverPicture&populate[1]=media&populate[2]=project_types&sort=createdAt:desc&pagination[pageSize]=3`
+        const allUrl = `${strapiUrl}/api/projects?populate[0]=coverPicture&populate[1]=media&populate[2]=homeMedia&populate[3]=project_types&sort=createdAt:desc&pagination[pageSize]=3`
         const allResponse = await $fetch(allUrl)
         
         if (allResponse.data && allResponse.data.length > 0) {
@@ -119,6 +132,19 @@ export const useProjects = () => {
                     height: item.media[0].height,
                     ext: item.media[0].ext,
                     mime: item.media[0].mime
+                  }
+                }
+              } : null,
+              homeMedia: item.homeMedia && item.homeMedia.length > 0 ? {
+                data: {
+                  id: item.homeMedia[0].id,
+                  attributes: {
+                    url: item.homeMedia[0].url,
+                    name: item.homeMedia[0].name || item.title,
+                    width: item.homeMedia[0].width,
+                    height: item.homeMedia[0].height,
+                    ext: item.homeMedia[0].ext,
+                    mime: item.homeMedia[0].mime
                   }
                 }
               } : null,

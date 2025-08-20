@@ -307,7 +307,21 @@ const getProjectCategory = (project) => {
 }
 
 const getProjectMedia = (project) => {
-  // Structure Strapi directe
+  // Priorité au nouveau champ homeMedia de Strapi
+  if (project.homeMedia && project.homeMedia.length > 0) {
+    return {
+      data: {
+        id: project.homeMedia[0].id,
+        attributes: {
+          url: project.homeMedia[0].url,
+          mime: project.homeMedia[0].mime,
+          name: project.homeMedia[0].name
+        }
+      }
+    }
+  }
+  
+  // Fallback vers l'ancien champ media si homeMedia n'existe pas
   if (project.media && project.media.length > 0) {
     return {
       data: {
@@ -320,8 +334,11 @@ const getProjectMedia = (project) => {
       }
     }
   }
-  // Structure transformée
+  
+  // Structure transformée (ancienne structure Strapi)
+  if (project.attributes?.homeMedia) return project.attributes.homeMedia
   if (project.attributes?.media) return project.attributes.media
+  
   return null
 }
 
