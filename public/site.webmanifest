@@ -1,0 +1,21 @@
+{
+  "name": "PYOH - Agence Créative",
+  "short_name": "PYOH",
+  "description": "Agence de communication visuelle full services",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#fddb00",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
