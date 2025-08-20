@@ -311,7 +311,7 @@ const fetchProject = async () => {
         let projectFound = false
         
         // Récupérer tous les projets pour chercher par titre
-        const allProjectsResponse = await $fetch(`${strapiUrl}/api/projects?populate[0]=*&populate[1]=url_videos`)
+        const allProjectsResponse = await $fetch(`${strapiUrl}/api/projects?populate[0]=*&populate[1]=url_videos&populate[2]=home-media`)
         
         if (allProjectsResponse.data && allProjectsResponse.data.length > 0) {
           // Chercher par slug (titre transformé)
@@ -327,7 +327,7 @@ const fetchProject = async () => {
           } else {
             // Fallback : essayer par ID si le slug est un nombre
             if (!isNaN(slug)) {
-              const idResponse = await $fetch(`${strapiUrl}/api/projects/${slug}?populate[0]=*&populate[1]=url_videos`)
+              const idResponse = await $fetch(`${strapiUrl}/api/projects/${slug}?populate[0]=*&populate[1]=url_videos&populate[2]=home-media`)
               if (idResponse.data) {
                 project.value = idResponse.data
                 projectFound = true
