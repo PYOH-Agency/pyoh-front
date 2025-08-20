@@ -67,7 +67,7 @@
           <NuxtLink 
             v-for="(project, index) in filteredProjects" 
             :key="project.id"
-            :to="`/portfolio/${project.id}`"
+            :to="`/portfolio/${createSlug(project.title)}`"
             class="group cursor-pointer project-card relative overflow-hidden block"
           >
             <!-- Image du projet en couverture -->
