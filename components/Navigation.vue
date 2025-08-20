@@ -87,7 +87,7 @@
                   v-for="(item, index) in menuItems"
                   :key="item.path"
                   :to="item.path"
-                  @click="closeMenu"
+                  @click="() => { closeMenu(); trackNavigationClick(item.label); }"
                   class="block text-4xl font-light text-white/80 hover:text-white transition-all duration-300 hover:scale-105 py-2 px-4 rounded-lg group relative"
                   :style="{ animationDelay: `${0.2 + index * 0.1}s` }"
                 >
@@ -116,7 +116,7 @@
                 <!-- Onglets -->
                 <div class="flex justify-center space-x-4 mb-8 animate-fade-in-up" style="animation-delay: 0.4s;">
                   <button
-                    @click="activeTab = 'contact'"
+                    @click="() => { activeTab = 'contact'; trackTabChange('contact'); }"
                     class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg relative group"
                     :class="{ 
                       'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'contact', 
@@ -131,7 +131,7 @@
                     ></span>
                   </button>
                   <button
-                    @click="activeTab = 'calendar'"
+                    @click="() => { activeTab = 'calendar'; trackTabChange('calendar'); }"
                     class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg relative group"
                     :class="{ 
                       'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'calendar', 
@@ -253,13 +253,53 @@ const menuItems = [
 // Méthodes
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
+  
+  // Tracking Vercel Analytics
+  const { trackInteraction } = useVercelAnalytics();
+  
   if (isMenuOpen.value) {
     activeTab.value = 'contact' // Réinitialiser à l'onglet contact
+    trackInteraction('click', 'menu_open', { 
+      page: route.path,
+      timestamp: new Date().toISOString()
+    });
+  } else {
+    trackInteraction('click', 'menu_close', { 
+      page: route.path,
+      timestamp: new Date().toISOString()
+    });
   }
 }
 
 const closeMenu = () => {
   isMenuOpen.value = false
+  
+  // Tracking Vercel Analytics
+  const { trackInteraction } = useVercelAnalytics();
+  trackInteraction('click', 'menu_close', { 
+    page: route.path,
+    timestamp: new Date().toISOString()
+  });
+}
+
+// Tracker les clics sur les liens de navigation
+const trackNavigationClick = (linkLabel: string) => {
+  const { trackInteraction } = useVercelAnalytics();
+  trackInteraction('click', 'navigation_link', {
+    link: linkLabel,
+    page: route.path,
+    timestamp: new Date().toISOString()
+  });
+}
+
+// Tracker les changements d'onglets
+const trackTabChange = (tab: string) => {
+  const { trackInteraction } = useVercelAnalytics();
+  trackInteraction('click', 'tab_change', {
+    tab: tab,
+    page: route.path,
+    timestamp: new Date().toISOString()
+  });
 }
 
 // Détection automatique au montage et au changement de route

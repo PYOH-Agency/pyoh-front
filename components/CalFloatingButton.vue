@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 
 onMounted(() => {
   // Code Cal.com fourni par l'utilisateur
@@ -43,7 +43,6 @@ onMounted(() => {
     "config":{"layout":"month_view","theme":"dark"},
     "buttonTextColor":"#fddb00",
     "buttonText":"Rendez-vous"
-    
   }); 
   
   Cal.ns["kick-off-de-votre-projet"]("ui", {
@@ -55,6 +54,66 @@ onMounted(() => {
     "hideEventTypeDetails":false,
     "layout":"month_view"
   });
+
+  // Tracking Vercel Analytics pour Cal.com
+  // Attendre que Cal.com soit chargé
+  setTimeout(() => {
+    if (window.Cal) {
+      // Utiliser le composable Vercel Analytics
+      const { trackEvent, trackInteraction, trackConversion } = useVercelAnalytics();
+
+      // Tracker l'ouverture du calendrier
+      const trackCalOpen = () => {
+        trackInteraction('click', 'cal_floating_button', { 
+          page: window.location.pathname 
+        });
+        trackEvent('calendar_open', {
+          source: 'floating_button',
+          page: window.location.pathname
+        });
+      };
+
+      // Tracker la réservation d'un rendez-vous
+      const trackMeetingBooked = () => {
+        trackConversion('meeting_booked');
+        trackEvent('meeting_booked', {
+          source: 'floating_button',
+          page: window.location.pathname,
+          timestamp: new Date().toISOString()
+        });
+      };
+
+      // Écouter les événements Cal.com
+      const handleCalClick = (e) => {
+        // Détecter le clic sur le bouton Cal.com
+        if (e.target.closest('.cal-floating-button') || 
+            e.target.closest('[data-cal-link]') ||
+            e.target.closest('.cal-button')) {
+          trackCalOpen();
+        }
+      };
+
+      document.addEventListener('click', handleCalClick);
+
+      // Détecter les changements d'URL (indiquant une réservation)
+      let currentUrl = window.location.href;
+      const urlObserver = setInterval(() => {
+        if (window.location.href !== currentUrl) {
+          if (window.location.href.includes('cal.com') || 
+              window.location.href.includes('paul-bugeon-el1oht')) {
+            trackMeetingBooked();
+          }
+          currentUrl = window.location.href;
+        }
+      }, 1000);
+
+      // Nettoyer les listeners
+      onUnmounted(() => {
+        clearInterval(urlObserver);
+        document.removeEventListener('click', handleCalClick);
+      });
+    }
+  }, 2000);
 })
 </script>
 

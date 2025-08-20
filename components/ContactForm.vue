@@ -94,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 // État du formulaire
 const form = ref({
@@ -114,12 +114,54 @@ const submitMessageClass = computed(() => {
     : 'bg-red-400/10 text-red-400 border border-red-400/20'
 })
 
+// Tracking Vercel Analytics avec le composable
+const { trackEvent, trackInteraction, trackConversion } = useVercelAnalytics();
+
+// Tracker le début de remplissage du formulaire
+const trackFormStart = () => {
+  trackEvent('contact_form_start', {
+    form_type: 'main_contact',
+    page: window.location.pathname
+  });
+};
+
+// Tracker les interactions avec les champs
+const trackFieldInteraction = (fieldName: string, action: string) => {
+  trackInteraction('field_interaction', fieldName, {
+    form_type: 'main_contact',
+    action: action
+  });
+};
+
+// Tracker la soumission du formulaire
+const trackFormSubmit = () => {
+  trackConversion('contact_form_submit');
+  trackEvent('contact_form_submit', {
+    form_type: 'main_contact',
+    project_type: form.value.projectType,
+    has_phone: !!form.value.phone,
+    page: window.location.pathname
+  });
+};
+
+// Tracker les erreurs
+const trackFormError = (error: string) => {
+  trackEvent('contact_form_error', {
+    error: error,
+    form_type: 'main_contact',
+    page: window.location.pathname
+  });
+};
+
 // Gestion de la soumission
 const handleSubmit = async () => {
   isSubmitting.value = true
   submitMessage.value = ''
 
   try {
+    // Tracker la soumission
+    trackFormSubmit();
+
     // Préparer le contenu de l'email
     const emailContent = `
 Nouveau message de contact depuis le site PYOH
@@ -156,10 +198,17 @@ Envoyé depuis le formulaire de contact du site PYOH
     }
     
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+    trackFormError(errorMessage);
     submitMessage.value = 'Erreur lors de l\'envoi du message. Veuillez réessayer.'
     console.error('Erreur formulaire:', error)
   } finally {
     isSubmitting.value = false
   }
 }
+
+// Tracker le début de remplissage au montage
+onMounted(() => {
+  trackFormStart();
+});
 </script>

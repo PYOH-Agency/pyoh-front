@@ -8,6 +8,11 @@ export default defineNuxtConfig({
     '@pinia/nuxt'
   ],
 
+  plugins: [
+    '~/plugins/vercel-analytics.client.ts',
+    '~/plugins/vercel-analytics.server.ts'
+  ],
+
   strapi: {
     url: process.env.NUXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
   },
