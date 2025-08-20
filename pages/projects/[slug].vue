@@ -305,53 +305,41 @@ const fetchProject = async () => {
     loading.value = true
     error.value = null
     
-    const slug = route.params.slug
-    console.log('🔍 Page dynamique - Slug recherché:', slug)
-    
-    // Essayer de récupérer le projet par slug (titre transformé)
-    let projectFound = false
-    
-    // Récupérer tous les projets pour chercher par titre
-    console.log('📡 Récupération de tous les projets...')
-                const allProjectsResponse = await $fetch(`${strapiUrl}/api/projects?populate[url_videos][populate]=*`)
-    console.log('📦 Réponse Strapi:', allProjectsResponse)
-    
-    if (allProjectsResponse.data && allProjectsResponse.data.length > 0) {
-      console.log('📋 Nombre de projets trouvés:', allProjectsResponse.data.length)
-      
-      // Chercher par slug (titre transformé)
-      const projectBySlug = allProjectsResponse.data.find(proj => {
-        const projectSlug = createSlug(proj.title)
-        console.log(`🔍 Comparaison: "${projectSlug}" vs "${slug}" pour "${proj.title}"`)
-        return projectSlug === slug
-      })
-      
-      if (projectBySlug) {
-        console.log('✅ Projet trouvé par slug:', projectBySlug)
-        project.value = projectBySlug
-        projectFound = true
-        setDefaultActiveTab()
-      } else {
-        console.log('❌ Aucun projet trouvé par slug')
+            const slug = route.params.slug
         
-        // Fallback : essayer par ID si le slug est un nombre
-        if (!isNaN(slug)) {
-          console.log('🔄 Tentative de récupération par ID:', slug)
-                            const idResponse = await $fetch(`${strapiUrl}/api/projects/${slug}?populate[url_videos][populate]=*`)
-                            if (idResponse.data) {
-                    console.log('✅ Projet trouvé par ID:', idResponse.data)
-                    project.value = idResponse.data
-                    projectFound = true
-                    setDefaultActiveTab()
-                  }
+        // Essayer de récupérer le projet par slug (titre transformé)
+        let projectFound = false
+        
+        // Récupérer tous les projets pour chercher par titre
+        const allProjectsResponse = await $fetch(`${strapiUrl}/api/projects?populate[0]=*&populate[1]=url_videos`)
+        
+        if (allProjectsResponse.data && allProjectsResponse.data.length > 0) {
+          // Chercher par slug (titre transformé)
+          const projectBySlug = allProjectsResponse.data.find(proj => {
+            const projectSlug = createSlug(proj.title)
+            return projectSlug === slug
+          })
+          
+          if (projectBySlug) {
+            project.value = projectBySlug
+            projectFound = true
+            setDefaultActiveTab()
+          } else {
+            // Fallback : essayer par ID si le slug est un nombre
+            if (!isNaN(slug)) {
+              const idResponse = await $fetch(`${strapiUrl}/api/projects/${slug}?populate[0]=*&populate[1]=url_videos`)
+              if (idResponse.data) {
+                project.value = idResponse.data
+                projectFound = true
+                setDefaultActiveTab()
+              }
+            }
+          }
         }
-      }
-    }
-    
-    if (!projectFound) {
-      console.log('❌ Aucun projet trouvé - affichage de l\'erreur')
-      error.value = 'Projet non trouvé'
-    }
+        
+        if (!projectFound) {
+          error.value = 'Projet non trouvé'
+        }
     
   } catch (err) {
     console.error('❌ Erreur lors de la récupération du projet:', err)
@@ -408,16 +396,14 @@ const getImageGridClass = (media, index) => {
 // Helper function pour créer un slug
 const createSlug = (title) => {
   if (!title) return ''
-  console.log('🔍 Création du slug pour:', title)
   
   const slug = title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
-    .replace(/^-+|-+$/g, '') // Corriger trim('-') qui n'existe pas
+    .replace(/^-+|-+$/g, '')
   
-  console.log('📝 Slug généré:', slug)
   return slug
 }
 

@@ -70,13 +70,7 @@
             :to="`/projects/${createSlug(project.title)}`"
             class="group cursor-pointer project-card relative overflow-hidden block"
           >
-            <!-- Debug info -->
-            <div class="absolute top-2 left-2 bg-black/80 text-white text-xs p-2 z-20">
-              <div>ID: {{ project.id }}</div>
-              <div>Titre: {{ project.title }}</div>
-              <div>Slug: {{ createSlug(project.title) }}</div>
-              <div>URL: /portfolio/{{ createSlug(project.title) }}</div>
-            </div>
+            
             
             <!-- Image du projet en couverture -->
             <div class="relative w-full h-80 bg-gray-50">
@@ -376,16 +370,14 @@ const toggleVideoPlayback = () => {
 // Helper functions
 const createSlug = (title) => {
   if (!title) return '';
-  console.log('🔍 Création du slug pour:', title);
   
   const slug = title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
-    .replace(/^-+|-+$/g, ''); // Corriger trim('-') qui n'existe pas
+    .replace(/^-+|-+$/g, '');
   
-  console.log('📝 Slug généré:', slug);
   return slug;
 };
 
