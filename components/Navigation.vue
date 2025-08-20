@@ -1,19 +1,19 @@
 <template>
   <div class="fixed top-0 left-0 z-50 w-full h-full pointer-events-none">
     <!-- Logo PYOH en haut à gauche (pas sur la home) -->
-    <div v-if="!isHomePage" class="absolute top-6 left-6 pointer-events-auto">
+    <div v-if="!isHomePage" class="absolute top-8 left-8 pointer-events-auto">
       <NuxtLink to="/" class="block">
         <img 
           :src="logoImage"
           alt="PYOH" 
-          class="h-20 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+          class="h-32 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
           :class="logoClasses"
         />
       </NuxtLink>
     </div>
 
-    <!-- Bouton de navigation discrète (haut droite) -->
-    <div class="absolute top-6 right-6 pointer-events-auto">
+    <!-- Bouton de navigation discrète (haut droite) - masqué sur les pages de projet -->
+    <div v-if="!isProjectDetailPage" class="absolute top-8 right-8 pointer-events-auto">
       <button
         @click="toggleMenu"
         class="nav-button group relative w-12 h-12 flex items-center justify-center backdrop-blur-sm rounded-full transition-all duration-300"
@@ -211,18 +211,8 @@ const detectBackgroundColor = () => {
 
 // Classes conditionnelles basées sur la couleur du fond
 const logoImage = computed(() => {
-  const luminance = backgroundLuminance.value
-  
-  if (luminance < 0.3) {
-    // Fond très sombre - utiliser PYOH-07 (optimisé pour les fonds sombres)
-    return '/images/Logos Pyoh-07.png'
-  } else if (luminance < 0.7) {
-    // Fond intermédiaire - utiliser PYOH-06 (polyvalent)
-    return '/images/Logos Pyoh-06.png'
-  } else {
-    // Fond clair - utiliser PYOH-04 (optimisé pour les fonds clairs)
-    return '/images/Logos Pyoh-04.png'
-  }
+  // Toujours utiliser le logo noir PYOH-04 pour une meilleure visibilité
+  return '/images/Logos Pyoh-04.png'
 })
 
 const logoClasses = computed(() => {

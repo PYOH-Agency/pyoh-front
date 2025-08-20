@@ -1,25 +1,21 @@
 <template>
   <div class="min-h-screen bg-white text-gray-900">
     <!-- Header avec navigation -->
-    <header class="py-8 border-b border-gray-100">
+    <header class="py-8 border-b border-gray-100 sticky top-0 z-40 bg-white/95 backdrop-blur-sm sticky-nav">
       <div class="container mx-auto px-8">
-        <div class="flex items-center justify-between">
-          <!-- Breadcrumb -->
+        <div class="flex items-center justify-end">
+          <!-- Breadcrumb à droite -->
           <nav class="flex items-center space-x-4 text-sm text-gray-500">
-            <NuxtLink to="/portfolio" class="hover:text-gray-900 transition-colors">
+            <button @click="goToHome" class="hover:text-gray-900 transition-colors text-left">
+              Accueil
+            </button>
+            <span>/</span>
+            <button @click="goToPortfolio" class="hover:text-gray-900 transition-colors text-left">
               Portfolio
-            </NuxtLink>
+            </button>
             <span>/</span>
             <span class="text-gray-900 font-medium">{{ project?.title || 'Chargement...' }}</span>
           </nav>
-          
-          <!-- Bouton retour -->
-          <NuxtLink 
-            to="/portfolio" 
-            class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 transition-all duration-300 font-light"
-          >
-            ← Retour au portfolio
-          </NuxtLink>
         </div>
       </div>
     </header>
@@ -90,56 +86,20 @@
           </div>
 
           <!-- Contenu des onglets -->
-          <div v-if="activeTab === 'gallery'" class="space-y-8">
-            <!-- Galerie en maçonnerie des images -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-auto">
-              <div 
-                v-for="(media, index) in imageMedia" 
-                :key="media.id"
-                @click="openLightbox(index)"
-                class="cursor-pointer group overflow-hidden rounded-lg shadow-lg relative"
-                :class="getImageGridClass(media, index)"
-              >
-                <img 
-                  :src="strapiMediaUrl(media.url)"
-                  :alt="media.name || `Image ${index + 1}`"
-                  class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                  <svg class="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                  </svg>
-                </div>
-              </div>
-            </div>
+          <div v-if="activeTab === 'gallery'">
+            <ImageGallery 
+              :images="imageMedia || []"
+              :loading="loading"
+              :images-per-page="10"
+              @image-click="openLightbox"
+            />
           </div>
 
-          <div v-else-if="activeTab === 'videos'" class="space-y-8">
-            <!-- Galerie des vidéos Vimeo -->
-            <div v-if="project.url_videos && project.url_videos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div 
-                v-for="(videoUrl, index) in project.url_videos" 
-                :key="index"
-                class="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
-              >
-                <div class="relative pb-[56.25%] bg-gray-100 rounded-lg overflow-hidden">
-                  <iframe 
-                    :src="getVimeoEmbedUrl(videoUrl.url)"
-                    class="absolute inset-0 w-full h-full"
-                    frameborder="0"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowfullscreen
-                  ></iframe>
-                </div>
-                <p class="mt-3 text-sm text-gray-600 text-center">
-                  {{ videoUrl.name || `Vidéo ${index + 1}` }}
-                </p>
-              </div>
-            </div>
-            <div v-else class="text-center py-12">
-              <p class="text-gray-500 text-lg">Aucune vidéo disponible pour ce projet</p>
-            </div>
+          <div v-else-if="activeTab === 'videos'">
+            <VideoGallery 
+              :videos="project?.url_videos || []"
+              @video-click="openVideoViewer"
+            />
           </div>
         </div>
       </div>
@@ -219,12 +179,27 @@
         </div>
       </div>
     </div>
+
+            <!-- Visionneuse vidéo -->
+        <VideoViewer
+          :open="videoViewerOpen"
+          :videos="project?.url_videos || []"
+          :current-index="currentVideoIndex"
+          @close="closeVideoViewer"
+          @previous="currentVideoIndex = (currentVideoIndex - 1 + (project?.url_videos?.length || 0)) % (project?.url_videos?.length || 1)"
+          @next="currentVideoIndex = (currentVideoIndex + 1) % (project?.url_videos?.length || 1)"
+        />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+// Composants
+import ImageGallery from '~/components/ImageGallery.vue'
+import VideoGallery from '~/components/VideoGallery.vue'
+import VideoViewer from '~/components/VideoViewer.vue'
 
 // Route et router
 const route = useRoute()
@@ -237,6 +212,10 @@ const error = ref(null)
 const activeTab = ref('gallery')
 const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
+const videoViewerOpen = ref(false)
+const currentVideoIndex = ref(0)
+
+
 
 // Définir l'onglet actif par défaut
 const setDefaultActiveTab = () => {
@@ -268,6 +247,8 @@ const videoMedia = computed(() => {
   )
 })
 
+
+
 const hasVideos = computed(() => videoMedia.value.length > 0)
 
 // Helper functions
@@ -286,6 +267,23 @@ const openLightbox = (index) => {
 const closeLightbox = () => {
   lightboxOpen.value = false
 }
+
+// Fonction pour ouvrir la visionneuse vidéo
+const openVideoViewer = (index) => {
+  if (!project.value?.url_videos || !Array.isArray(project.value.url_videos)) {
+    console.warn('Aucune vidéo disponible pour ce projet')
+    return
+  }
+  currentVideoIndex.value = index
+  videoViewerOpen.value = true
+}
+
+// Fonction pour fermer la visionneuse vidéo
+const closeVideoViewer = () => {
+  videoViewerOpen.value = false
+}
+
+
 
 const nextImage = () => {
   if (currentImageIndex.value < imageMedia.value.length - 1) {
@@ -311,7 +309,7 @@ const fetchProject = async () => {
         let projectFound = false
         
         // Récupérer tous les projets pour chercher par titre
-        const allProjectsResponse = await $fetch(`${strapiUrl}/api/projects?populate[0]=*&populate[1]=url_videos&populate[2]=home-media`)
+        const allProjectsResponse = await $fetch(`${strapiUrl}/api/projects?populate[0]=media&populate[1]=coverPicture&populate[2]=project_types&populate[3]=url_videos&populate[4]=homeMedia`)
         
         if (allProjectsResponse.data && allProjectsResponse.data.length > 0) {
           // Chercher par slug (titre transformé)
@@ -327,7 +325,7 @@ const fetchProject = async () => {
           } else {
             // Fallback : essayer par ID si le slug est un nombre
             if (!isNaN(slug)) {
-              const idResponse = await $fetch(`${strapiUrl}/api/projects/${slug}?populate[0]=*&populate[1]=url_videos&populate[2]=home-media`)
+              const idResponse = await $fetch(`${strapiUrl}/api/projects/${slug}?populate[0]=media&populate[1]=coverPicture&populate[2]=project_types&populate[3]=url_videos&populate[4]=homeMedia`)
               if (idResponse.data) {
                 project.value = idResponse.data
                 projectFound = true
@@ -351,47 +349,9 @@ const fetchProject = async () => {
 
 
 
-// Fonction pour convertir une URL Vimeo en URL d'embed
-const getVimeoEmbedUrl = (vimeoUrl) => {
-  if (!vimeoUrl) return ''
-  
-  // Extraire l'ID de la vidéo Vimeo
-  const vimeoId = vimeoUrl.match(/vimeo\.com\/(\d+)/)?.[1]
-  if (vimeoId) {
-    return `https://player.vimeo.com/video/${vimeoId}?h=hash&dnt=1&title=0&byline=0&portrait=0`
-  }
-  
-  // Si ce n'est pas une URL Vimeo valide, retourner l'URL d'origine
-  return vimeoUrl
-}
 
-// Fonction pour créer des classes CSS variables pour l'effet maçonnerie
-const getImageGridClass = (media, index) => {
-  // Créer des tailles variables basées sur l'index pour l'effet maçonnerie
-  const heightClasses = [
-    'row-span-1', // Hauteur normale
-    'row-span-2', // Hauteur double
-    'row-span-1', // Hauteur normale
-    'row-span-3', // Hauteur triple
-    'row-span-2', // Hauteur double
-    'row-span-1', // Hauteur normale
-  ]
-  
-  // Alterner entre différentes largeurs pour plus de variété
-  const widthClasses = [
-    'col-span-1', // Largeur normale
-    'col-span-1', // Largeur normale
-    'col-span-2', // Largeur double (sur 2 colonnes)
-    'col-span-1', // Largeur normale
-    'col-span-1', // Largeur normale
-    'col-span-2', // Largeur double
-  ]
-  
-  const heightClass = heightClasses[index % heightClasses.length]
-  const widthClass = widthClasses[index % widthClasses.length]
-  
-  return `${heightClass} ${widthClass}`
-}
+
+
 
 // Helper function pour créer un slug
 const createSlug = (title) => {
@@ -406,6 +366,15 @@ const createSlug = (title) => {
   
   return slug
 }
+
+// Navigation functions
+const goToHome = () => {
+  window.location.href = '/';
+};
+
+const goToPortfolio = () => {
+  window.location.href = '/portfolio';
+};
 
 // Lifecycle
 onMounted(() => {
@@ -422,6 +391,13 @@ useHead({
 </script>
 
 <style scoped>
+/* Styles pour le breadcrumb sticky */
+.sticky-nav {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
 /* Styles pour la galerie en maçonnerie avec grille CSS */
 .grid {
   display: grid;

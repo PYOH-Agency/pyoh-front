@@ -1,5 +1,21 @@
 <template>
   <div class="min-h-screen bg-white text-gray-900">
+    <!-- Breadcrumb sticky -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-8 sticky-nav">
+      <div class="container mx-auto px-8">
+        <div class="flex items-center justify-end">
+          <!-- Breadcrumb à droite -->
+          <div class="flex items-center space-x-4 text-sm text-gray-500">
+            <button @click="goToHome" class="hover:text-gray-700 transition-colors text-left">
+              Accueil
+            </button>
+            <span>/</span>
+            <span class="text-gray-900 font-medium">Portfolio</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <!-- Header minimaliste style Nicex -->
     <header class="py-32 bg-white">
       <div class="container mx-auto px-8">
@@ -381,6 +397,11 @@ const createSlug = (title) => {
   return slug;
 };
 
+// Navigation functions
+const goToHome = () => {
+  window.location.href = '/';
+};
+
 // Redirection vers la page dédiée du projet
 const goToProject = (project) => {
   console.log('🚀 Redirection vers le projet:', project);
@@ -531,6 +552,13 @@ onMounted(async () => {
 .project-card .badge:hover {
   background-color: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Styles pour le breadcrumb sticky */
+.sticky-nav {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 /* Responsive pour la grille */

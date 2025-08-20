@@ -26,7 +26,7 @@ export const useProjects = () => {
       error.value = null
 
       const response = await find<ProjectsResponse>('projects', {
-        populate: options?.populate || ['media', 'homeMedia', 'coverPicture', 'home-media', 'project_types', 'url_videos'],
+        populate: options?.populate || ['media', 'homeMedia', 'coverPicture', 'project_types', 'url_videos'],
         sort: options?.sort || ['createdAt:desc'],
         filters: options?.filters || {},
         pagination: options?.pagination || { page: 1, pageSize: 100 }
@@ -54,7 +54,7 @@ export const useProjects = () => {
       const strapiUrl = config.public.strapiUrl || 'http://localhost:1337'
       
       // Essayer avec $fetch directement
-              const url = `${strapiUrl}/api/projects?populate[0]=coverPicture&populate[1]=media&populate[2]=homeMedia&populate[3]=home-media&populate[4]=project_types&populate[5]=url_videos&filters[featured][$eq]=true&sort=createdAt:desc&pagination[pageSize]=10`
+              const url = `${strapiUrl}/api/projects?populate[0]=coverPicture&populate[1]=media&populate[2]=homeMedia&populate[3]=project_types&populate[4]=url_videos&filters[featured][$eq]=true&sort=createdAt:desc&pagination[pageSize]=10`
       
       const response = await $fetch(url)
       
