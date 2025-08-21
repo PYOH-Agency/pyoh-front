@@ -1,106 +1,68 @@
 <template>
-  <div class="min-h-screen bg-white text-gray-900">
-    <!-- Header avec navigation -->
-    <header class="py-8 border-b border-gray-100 sticky top-0 z-40 bg-white/95 backdrop-blur-sm sticky-nav">
-      <div class="container mx-auto px-8">
-        <div class="flex items-center justify-end">
-          <!-- Breadcrumb à droite -->
-          <nav class="flex items-center space-x-4 text-sm text-gray-500">
-            <button @click="goToHome" class="hover:text-gray-900 transition-colors text-left">
-              Accueil
-            </button>
-            <span>/</span>
-            <button @click="goToPortfolio" class="hover:text-gray-900 transition-colors text-left">
-              Portfolio
-            </button>
-            <span>/</span>
-            <span class="text-gray-900 font-secondary">{{ project?.title || 'Chargement...' }}</span>
-          </nav>
+  <PageLayout page-type="project-detail" backgroundColor="white" :current-page="project?.title || 'Chargement...'" padding="none" max-width="full">
+    <!-- Contenu principal -->
+    <main v-if="project" class="py-16 px-4">
+      <div class="max-w-4xl mx-auto mb-16">
+        <h1 class="text-5xl md:text-6xl font-primary mb-8 text-gray-900 leading-tight">
+          {{ project.title }}
+        </h1>
+        
+        <!-- Métadonnées -->
+        <div class="flex flex-wrap gap-8 mb-12 text-sm text-gray-600">
+          <div v-if="project.client" class="flex items-center space-x-2">
+            <span class="font-secondary">Client :</span>
+            <span class="font-paragraph">{{ project.client }}</span>
+          </div>
+          <div v-if="project.year" class="flex items-center space-x-2">
+            <span class="font-secondary">Année :</span>
+            <span class="font-paragraph">{{ project.year }}</span>
+          </div>
+          <div v-if="project.projectUrl" class="flex items-center space-x-2">
+            <span class="font-secondary">Lien :</span>
+            <a 
+              :href="project.projectUrl" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-blue-600 hover:text-blue-800 underline font-paragraph"
+            >
+              Voir le projet
+            </a>
+          </div>
+        </div>
+        
+        <!-- Description -->
+        <div v-if="project.description" class="prose prose-lg max-w-none">
+          <p class="text-gray-700 leading-relaxed font-paragraph">{{ project.description }}</p>
         </div>
       </div>
-    </header>
 
-    <!-- Contenu principal -->
-    <main v-if="project" class="py-16">
-      <div class="container mx-auto px-8">
-        <!-- Informations du projet -->
-        <div class="max-w-4xl mx-auto mb-16">
-          <h1 class="text-5xl md:text-6xl font-primary mb-8 text-gray-900 leading-tight">
-            {{ project.title }}
-          </h1>
-          
-          <!-- Métadonnées -->
-          <div class="flex flex-wrap gap-8 mb-12 text-sm text-gray-600">
-            <div v-if="project.client" class="flex items-center space-x-2">
-              <span class="font-secondary">Client :</span>
-              <span class="font-paragraph">{{ project.client }}</span>
-            </div>
-            <div v-if="project.year" class="flex items-center space-x-2">
-              <span class="font-secondary">Année :</span>
-              <span class="font-paragraph">{{ project.year }}</span>
-            </div>
-            <div v-if="project.projectUrl" class="flex items-center space-x-2">
-              <span class="font-secondary">Lien :</span>
-              <a 
-                :href="project.projectUrl" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="text-blue-600 hover:text-blue-800 underline font-paragraph"
-              >
-                Voir le projet
-              </a>
-            </div>
-          </div>
-          
-          <!-- Description -->
-          <div v-if="project.description" class="prose prose-lg max-w-none">
-            <p class="text-gray-700 leading-relaxed font-paragraph">{{ project.description }}</p>
-          </div>
+      <!-- Galerie avec onglets -->
+      <div class="max-w-6xl mx-auto">
+        <!-- Onglets -->
+        <div v-if="hasVideos" class="flex justify-center mb-12">
+          <AppTab
+            v-model="activeTab"
+            :tabs="mediaTabs"
+            color="gray-600"
+            active-color="pyoh-yellow"
+          />
         </div>
 
-        <!-- Galerie avec onglets -->
-        <div class="max-w-6xl mx-auto">
-          <!-- Onglets -->
-          <div v-if="hasVideos" class="flex justify-center mb-12">
-            <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
-              <button
-                @click="activeTab = 'gallery'"
-                class="px-6 py-3 text-sm font-secondary transition-all duration-300"
-                :class="activeTab === 'gallery' 
-                  ? 'bg-white text-gray-900 shadow-sm' 
-                  : 'text-gray-600 hover:text-gray-900'"
-              >
-                Galerie
-              </button>
-                          <button 
-              v-if="project.url_videos && project.url_videos.length > 0"
-              @click="activeTab = 'videos'"
-              class="px-6 py-3 text-sm font-secondary transition-all duration-300"
-              :class="activeTab === 'videos' 
-                ? 'bg-white text-gray-900 shadow-sm' 
-                : 'text-gray-900 shadow-sm'"
-            >
-              Vidéos
-            </button>
-            </div>
-          </div>
+        <!-- Contenu des onglets -->
+        <div v-if="activeTab === 'gallery'">
+          <ImageGallery 
+            :images="imageMedia || []"
+            :loading="loading"
+            :images-per-page="10"
+            @image-click="openLightbox"
+          />
+        </div>
 
-          <!-- Contenu des onglets -->
-          <div v-if="activeTab === 'gallery'">
-            <ImageGallery 
-              :images="imageMedia || []"
-              :loading="loading"
-              :images-per-page="10"
-              @image-click="openLightbox"
-            />
-          </div>
-
-          <div v-else-if="activeTab === 'videos'">
-            <VideoGallery 
-              :videos="project?.url_videos || []"
-              @video-click="openVideoViewer"
-            />
-          </div>
+        <div v-else-if="activeTab === 'videos'">
+          <VideoGallery 
+            :videos="project?.url_videos || []"
+            @video-click="openVideoViewer"
+          />
         </div>
       </div>
     </main>
@@ -180,16 +142,16 @@
       </div>
     </div>
 
-            <!-- Visionneuse vidéo -->
-        <VideoViewer
-          :open="videoViewerOpen"
-          :videos="project?.url_videos || []"
-          :current-index="currentVideoIndex"
-          @close="closeVideoViewer"
-          @previous="currentVideoIndex = (currentVideoIndex - 1 + (project?.url_videos?.length || 0)) % (project?.url_videos?.length || 1)"
-          @next="currentVideoIndex = (currentVideoIndex + 1) % (project?.url_videos?.length || 1)"
-        />
-  </div>
+    <!-- Visionneuse vidéo -->
+    <VideoViewer
+      :open="videoViewerOpen"
+      :videos="project?.url_videos || []"
+      :current-index="currentVideoIndex"
+      @close="closeVideoViewer"
+      @previous="currentVideoIndex = (currentVideoIndex - 1 + (project?.url_videos?.length || 0)) % (project?.url_videos?.length || 1)"
+      @next="currentVideoIndex = (currentVideoIndex + 1) % (project?.url_videos?.length || 1)"
+    />
+  </PageLayout>
 </template>
 
 <script setup>
@@ -214,6 +176,19 @@ const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
 const videoViewerOpen = ref(false)
 const currentVideoIndex = ref(0)
+
+// Tabs pour les médias
+const mediaTabs = computed(() => {
+  const tabs = [
+    { label: 'Galerie', value: 'gallery' }
+  ]
+  
+  if (project.value?.url_videos && project.value.url_videos.length > 0) {
+    tabs.push({ label: 'Vidéos', value: 'videos' })
+  }
+  
+  return tabs
+})
 
 
 

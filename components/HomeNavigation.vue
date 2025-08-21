@@ -1,19 +1,16 @@
 <template>
-  <div class="fixed top-0 left-0 z-50 w-full h-full pointer-events-none">
-    <!-- Logo PYOH en haut à gauche (pas sur la home) -->
-    <div v-if="!isHomePage" class="absolute top-8 left-8 pointer-events-auto">
-      <NuxtLink to="/" class="block">
-        <img 
-          :src="logoImage"
-          alt="PYOH" 
-          class="h-32 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
-          :class="logoClasses"
-        />
-      </NuxtLink>
+  <div class="home-navigation">
+    <!-- Logo PYOH en haut à gauche -->
+    <div class="absolute top-8 left-8 z-30">
+      <img 
+        :src="logoUrl" 
+        alt="PYOH Logo" 
+        class="h-40 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+      />
     </div>
 
-    <!-- Bouton de navigation discrète (haut droite) - masqué sur portfolio et détail projet -->
-    <div v-if="props.pageType !== 'portfolio' && props.pageType !== 'project-detail'" class="absolute top-8 right-8 pointer-events-auto">
+    <!-- Bouton de navigation discrète (haut droite) -->
+    <div class="absolute top-8 right-8 pointer-events-auto">
       <button
         @click="toggleMenu"
         class="nav-button group relative w-12 h-12 flex items-center justify-center backdrop-blur-sm rounded-full transition-all duration-300"
@@ -37,11 +34,6 @@
           ></span>
         </div>
       </button>
-    </div>
-
-    <!-- Bouton flottant Cal.com -->
-    <div v-if="props.pageType !== 'home'" class="absolute bottom-6 left-6 pointer-events-auto">
-      <CalFloatingButton />
     </div>
 
     <!-- Menu plein écran -->
@@ -87,7 +79,7 @@
                   v-for="(item, index) in menuItems"
                   :key="item.path"
                   :to="item.path"
-                  @click="() => { closeMenu(); trackNavigationClick(item.label); }"
+                  @click="closeMenu"
                   class="block text-4xl font-secondary text-white/80 hover:text-white transition-all duration-300 hover:scale-105 py-2 px-4 rounded-lg group relative"
                   :style="{ animationDelay: `${0.2 + index * 0.1}s` }"
                 >
@@ -96,7 +88,7 @@
                     <!-- Effet de soulignement jaune au hover -->
                     <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pyoh-yellow transition-all duration-300 group-hover:w-full"></span>
                   </span>
-                  <!-- Point jaune au hover - repositionné pour être visible -->
+                  <!-- Point jaune au hover -->
                   <span class="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-pyoh-yellow rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100"></span>
                 </NuxtLink>
               </nav>
@@ -114,15 +106,37 @@
                 </div>
 
                 <!-- Onglets -->
-                <div class="flex justify-center mb-8 animate-fade-in-up" style="animation-delay: 0.4s;">
-                  <AppTab
-                    v-model="activeTab"
-                    :tabs="contactTabs"
-                    color="white/60"
-                    active-color="pyoh-yellow"
-                    :background-color="backgroundColor"
-                    class="text-lg"
-                  />
+                <div class="flex justify-center space-x-4 mb-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                  <button
+                    @click="() => { activeTab = 'contact'; }"
+                    class="px-8 py-3 text-lg font-secondary transition-all duration-300 border-b-2 rounded-t-lg relative group"
+                    :class="{ 
+                      'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'contact', 
+                      'text-white/60 border-transparent hover:text-white hover:border-white/30 hover:bg-white/5': activeTab !== 'contact' 
+                    }"
+                  >
+                    Contact
+                    <!-- Point jaune au hover pour l'onglet actif -->
+                    <span 
+                      v-if="activeTab === 'contact'"
+                      class="absolute -top-1 -right-1 w-3 h-3 bg-pyoh-yellow rounded-full animate-pulse"
+                    ></span>
+                  </button>
+                  <button
+                    @click="() => { activeTab = 'calendar'; }"
+                    class="px-8 py-3 text-lg font-secondary transition-all duration-300 border-b-2 rounded-t-lg relative group"
+                    :class="{ 
+                      'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'calendar', 
+                      'text-white/60 border-transparent hover:text-white hover:border-white/30 hover:bg-white/5': activeTab !== 'calendar' 
+                    }"
+                  >
+                    Rendez-vous
+                    <!-- Point jaune au hover pour l'onglet actif -->
+                    <span 
+                      v-if="activeTab === 'calendar'"
+                      class="absolute -top-1 -right-1 w-3 h-3 bg-pyoh-yellow rounded-full animate-pulse"
+                    ></span>
+                  </button>
                 </div>
 
                 <!-- Contenu des onglets -->
@@ -150,47 +164,38 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+<script setup>
+import { ref, computed } from 'vue'
 
-// État du menu
-const isMenuOpen = ref(false)
-const activeTab = ref<string>('contact') // Onglet contact par défaut
-
-// Tabs pour le contact
-const contactTabs = [
-  { label: 'Contact', value: 'contact' },
-  { label: 'Rendez-vous', value: 'calendar' }
-]
-
-// Props pour la configuration de la page
+// Props pour la configuration
 const props = defineProps({
-  pageType: {
-    type: String,
-    default: 'other'
-  },
   backgroundColor: {
     type: String,
     default: 'black'
   }
 })
 
-// Vérifier si on est sur la page home
-const route = useRoute()
-const router = useRouter()
-const isHomePage = computed(() => route.path === '/' || route.path === '/index')
+// État du menu
+const isMenuOpen = ref(false)
+const activeTab = ref('contact')
 
-// Détection de la couleur du fond basée sur les props
-const isDarkBackground = computed(() => props.backgroundColor === 'black')
+// Items de navigation
+const menuItems = [
+  { path: '/', label: 'Home' },
+  { path: '/portfolio', label: 'Portfolio' },
+  { path: '/about', label: 'À propos' },
+  { path: '/contact', label: 'Contact' }
+]
 
-// Classes conditionnelles basées sur la couleur du fond
-const logoImage = computed(() => {
-  // Logo dynamique selon la couleur de fond
+// Logo dynamique selon la couleur de fond
+const logoUrl = computed(() => {
   return props.backgroundColor === 'white' 
     ? '/images/Logos Pyoh-04.png'  // Logo noir pour fond blanc
     : '/images/Logos Pyoh-07.png'  // Logo blanc pour fond noir
 })
+
+// Classes conditionnelles basées sur la couleur du fond
+const isDarkBackground = computed(() => props.backgroundColor === 'black')
 
 const buttonClasses = computed(() => {
   if (isDarkBackground.value) {
@@ -204,85 +209,32 @@ const lineClasses = computed(() => {
   return isDarkBackground.value ? 'bg-white' : 'bg-black'
 })
 
-// Items de navigation
-const menuItems = [
-  { path: '/', label: 'Home' },
-  { path: '/portfolio', label: 'Portfolio' },
-  { path: '/about', label: 'À propos' },
-  { path: '/contact', label: 'Contact' }
-]
-
 // Méthodes
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
-  
-  if (isMenuOpen.value) {
-    activeTab.value = 'contact' // Réinitialiser à l'onglet contact
-  }
 }
 
 const closeMenu = () => {
   isMenuOpen.value = false
 }
-
-// Navigation simple
-const goToPage = (path: string) => {
-  router.push(path)
-  closeMenu()
-}
-
-// Plus besoin de détection automatique car on utilise les props
-onMounted(() => {
-  // Initialisation si nécessaire
-})
-
-// Fermer le menu avec la touche Escape
-onMounted(() => {
-  const handleEscape = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      isMenuOpen.value = false
-    }
-  }
-  
-  document.addEventListener('keydown', handleEscape)
-  
-  onUnmounted(() => {
-    document.removeEventListener('keydown', handleEscape)
-  })
-})
 </script>
 
 <style scoped>
-/* Styles spécifiques au composant */
+.home-navigation {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .nav-button {
-  @apply bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 rounded-full border border-white/20;
+  @apply bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 p-4 rounded-full border border-white/20;
 }
 
 .nav-button:hover {
-  @apply bg-white/20 transform scale-105;
+  @apply bg-white/20;
 }
 
-/* Utilisation de la couleur jaune PYOH */
-.bg-pyoh-yellow {
-  background-color: var(--pyoh-yellow);
-}
-
-.text-pyoh-yellow {
-  color: var(--pyoh-yellow);
-}
-
-.border-pyoh-yellow {
-  border-color: var(--pyoh-yellow);
-}
-
-/* Effet de hover sur les onglets */
-button:hover .border-pyoh-yellow {
-  border-color: var(--pyoh-yellow-hover);
-}
-
-/* Point jaune au hover des liens de navigation */
-.nav a.group:hover .bg-pyoh-yellow {
-  background-color: var(--pyoh-yellow) !important;
-  z-index: 10;
+.nav-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
 }
 </style>

@@ -336,8 +336,12 @@ const getProjectMedia = (project) => {
   }
   
   // Structure transformée (ancienne structure Strapi)
-  if (project.attributes?.homeMedia) return project.attributes.homeMedia
-  if (project.attributes?.media) return project.attributes.media
+  if (project.attributes?.homeMedia) {
+    return project.attributes.homeMedia
+  }
+  if (project.attributes?.media) {
+    return project.attributes.media
+  }
   
   return null
 }

@@ -1,66 +1,31 @@
 <template>
-  <div class="min-h-screen bg-white text-gray-900">
-    <!-- Breadcrumb sticky -->
-    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-8 sticky-nav">
-      <div class="container mx-auto px-8">
-        <div class="flex items-center justify-end">
-          <!-- Breadcrumb à droite -->
-          <div class="flex items-center space-x-4 text-sm text-gray-500">
-            <button @click="goToHome" class="hover:text-gray-700 transition-colors text-left">
-              Accueil
-            </button>
-            <span>/</span>
-            <span class="text-gray-900 font-secondary">Portfolio</span>
-          </div>
-        </div>
-      </div>
-    </nav>
-
+  <PageLayout page-type="portfolio" backgroundColor="white" padding="none" max-width="full">
     <!-- Header minimaliste style Nicex -->
-    <header class="py-32 bg-white">
-      <div class="container mx-auto px-8">
-        <div class="max-w-4xl mx-auto text-center">
-          <h1 class="text-6xl md:text-7xl font-primary mb-8 tracking-tight text-gray-900 leading-tight">
-            Portfolio
-          </h1>
-          
-
-        </div>
+    <div class="py-32 bg-white px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-6xl md:text-7xl font-primary mb-8 tracking-tight text-gray-900 leading-tight">
+          Portfolio
+        </h1>
       </div>
-    </header>
+    </div>
 
     <!-- Filtres style Nicex -->
-    <section class="py-4 border-b border-gray-100">
-      <div class="container mx-auto px-8">
-        <div class="flex flex-wrap gap-8 justify-center">
-          <button 
-            @click="setActiveFilter('all')"
-            class="text-sm font-secondary tracking-widest uppercase transition-all duration-300 hover:text-gray-900"
-            :class="activeFilter === 'all' 
-              ? 'text-gray-900' 
-              : 'text-gray-400'"
-          >
-            All
-          </button>
-          
-          <button 
-            v-for="type in projectTypes" 
-            :key="type.id"
-            @click="setActiveFilter(type.label)"
-            class="text-sm font-secondary tracking-widest uppercase transition-all duration-300 hover:text-gray-900"
-            :class="activeFilter === type.label 
-              ? 'text-gray-900' 
-              : 'text-gray-400'"
-          >
-            {{ type.label }}
-          </button>
+    <section class="py-4 border-b border-gray-100 px-4">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex justify-center">
+          <AppTab
+            v-model="activeFilter"
+            :tabs="filterTabs"
+            color="gray-400"
+            active-color="pyoh-yellow"
+          />
         </div>
       </div>
     </section>
 
     <!-- Grille masonry des projets -->
-    <section class="py-24">
-      <div class="container mx-auto px-8">
+    <section class="py-24 px-4">
+      <div class="max-w-7xl mx-auto">
         <!-- État de chargement -->
         <div v-if="loading" class="text-center py-32">
           <div class="inline-block">
@@ -178,7 +143,7 @@
         </div>
       </div>
     </section>
-  </div>
+  </PageLayout>
 </template>
 
 <script setup>
@@ -210,6 +175,24 @@ const videoElement = ref(null) // Ref for video element
 
 // Types de projets Strapi (maintenant depuis l'API)
 const projectTypes = ref([])
+
+// Tabs pour les filtres
+const filterTabs = computed(() => {
+  const tabs = [
+    { label: 'All', value: 'all' }
+  ]
+  
+  if (projectTypes.value && projectTypes.value.length > 0) {
+    projectTypes.value.forEach(type => {
+      tabs.push({
+        label: type.label,
+        value: type.label
+      })
+    })
+  }
+  
+  return tabs
+})
 
 // Récupérer les types de projets depuis Strapi
 const fetchProjectTypes = async () => {

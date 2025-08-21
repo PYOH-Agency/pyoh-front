@@ -1,5 +1,8 @@
 <template>
   <div class="min-h-screen bg-black text-white overflow-hidden">
+    <!-- Navigation spécifique à la home -->
+    <HomeNavigation backgroundColor="black" />
+    
     <!-- Hero Section avec projets -->
     <ProjectSlider 
       :projects="featuredProjects" 

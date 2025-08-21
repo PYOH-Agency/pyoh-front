@@ -60,48 +60,81 @@ export const useProjects = () => {
       
       if (response.data && response.data.length > 0) {
         // Adapter la structure des données pour qu'elle corresponde à notre interface
-        featuredProjects.value = response.data.map(item => ({
-          id: item.id,
-          attributes: {
-            title: item.title,
-            subtitle: item.subtitle,
-            category: item.type || 'Projet', // Utiliser 'type' comme catégorie
-            client: item.client,
-            year: item.year,
-            featured: item.featured,
-            projectUrl: item.projectUrl,
-            media: item.media && item.media.length > 0 ? {
-              data: {
-                id: item.media[0].id,
-                attributes: {
-                  url: item.media[0].url,
-                  name: item.media[0].name || item.title,
-                  width: item.media[0].width,
-                  height: item.media[0].height,
-                  ext: item.media[0].ext,
-                  mime: item.media[0].mime
-                }
-              }
-            } : null,
-            homeMedia: item.homeMedia && item.homeMedia.length > 0 ? {
-              data: {
-                id: item.homeMedia[0].id,
-                attributes: {
-                  url: item.homeMedia[0].url,
-                  name: item.homeMedia[0].name || item.title,
-                  width: item.homeMedia[0].width,
-                  height: item.homeMedia[0].height,
-                  ext: item.homeMedia[0].ext,
-                  mime: item.homeMedia[0].mime
-                }
-              }
-            } : null,
-            createdAt: item.createdAt,
-            updatedAt: item.updatedAt
-          }
-        }))
+        featuredProjects.value = response.data.map(item => {
+           
+           return {
+             id: item.id,
+             attributes: {
+               title: item.title,
+               subtitle: item.subtitle,
+               category: item.type || 'Projet', // Utiliser 'type' comme catégorie
+               client: item.client,
+               year: item.year,
+               featured: item.featured,
+               projectUrl: item.projectUrl,
+               media: item.media && item.media.length > 0 ? {
+                 data: {
+                   id: item.media[0].id,
+                   attributes: {
+                     url: item.media[0].url,
+                     name: item.media[0].name || item.title,
+                     width: item.media[0].width,
+                     height: item.media[0].height,
+                     ext: item.media[0].ext,
+                     mime: item.media[0].mime
+                   }
+                 }
+               } : null,
+               homeMedia: item.homeMedia?.data?.attributes?.url
+                 ? {
+                     data: {
+                       id: item.homeMedia.data.id,
+                       attributes: {
+                         url: item.homeMedia.data.attributes.url,
+                         name: item.homeMedia.data.attributes.name || item.title,
+                         width: item.homeMedia.data.attributes.width,
+                         height: item.homeMedia.data.attributes.height,
+                         ext: item.homeMedia.data.attributes.ext,
+                         mime: item.homeMedia.data.attributes.mime
+                       }
+                     }
+                   }
+                 : (Array.isArray(item.homeMedia) && item.homeMedia.length > 0)
+                 ? {
+                     data: {
+                       id: item.homeMedia[0].id,
+                       attributes: {
+                         url: item.homeMedia[0].url,
+                         name: item.homeMedia[0].name || item.title,
+                         width: item.homeMedia[0].width,
+                         height: item.homeMedia[0].height,
+                         ext: item.homeMedia[0].ext,
+                         mime: item.homeMedia[0].mime
+                       }
+                     }
+                   }
+                 : item.homeMedia?.url
+                 ? {
+                     data: {
+                       id: item.homeMedia.id,
+                       attributes: {
+                         url: item.homeMedia.url,
+                         name: item.homeMedia.name || item.title,
+                         width: item.homeMedia.width,
+                         height: item.homeMedia.height,
+                         ext: item.homeMedia.ext,
+                         mime: item.homeMedia.mime
+                       }
+                     }
+                   }
+                 : null,
+               createdAt: item.createdAt,
+               updatedAt: item.updatedAt
+             }
+           }
+         })
         
-        console.log('🔄 Projets transformés:', featuredProjects.value)
+
         
 
       } else {
@@ -135,19 +168,92 @@ export const useProjects = () => {
                   }
                 }
               } : null,
-              homeMedia: item.homeMedia && item.homeMedia.length > 0 ? {
-                data: {
-                  id: item.homeMedia[0].id,
-                  attributes: {
-                    url: item.homeMedia[0].url,
-                    name: item.homeMedia[0].name || item.title,
-                    width: item.homeMedia[0].width,
-                    height: item.homeMedia[0].height,
-                    ext: item.homeMedia[0].ext,
-                    mime: item.homeMedia[0].mime
+              homeMedia: item.homeMedia?.data?.attributes?.url
+                ? {
+                    data: {
+                      id: item.homeMedia.data.id,
+                      attributes: {
+                        url: item.homeMedia.data.attributes.url,
+                        name: item.homeMedia.data.attributes.name || item.title,
+                        width: item.homeMedia.data.attributes.width,
+                        height: item.homeMedia.data.attributes.height,
+                        ext: item.homeMedia.data.attributes.ext,
+                        mime: item.homeMedia.data.attributes.mime
+                      }
+                    }
                   }
-                }
-              } : null,
+                : (Array.isArray(item.homeMedia) && item.homeMedia.length > 0)
+                ? {
+                    data: {
+                      id: item.homeMedia[0].id,
+                      attributes: {
+                        url: item.homeMedia[0].url,
+                        name: item.homeMedia[0].name || item.title,
+                        width: item.homeMedia[0].width,
+                        height: item.homeMedia[0].height,
+                        ext: item.homeMedia[0].ext,
+                        mime: item.homeMedia[0].mime
+                      }
+                    }
+                  }
+                : item.homeMedia?.url
+                ? {
+                    data: {
+                      id: item.homeMedia.id,
+                      attributes: {
+                        url: item.homeMedia.url,
+                        name: item.homeMedia.name || item.title,
+                        width: item.homeMedia.width,
+                        height: item.homeMedia.height,
+                        ext: item.homeMedia.ext,
+                        mime: item.homeMedia.mime
+                      }
+                    }
+                  }
+                : null,
+              homeMedia: item.homeMedia?.data?.attributes?.url
+                ? {
+                    data: {
+                      id: item.homeMedia.data.id,
+                      attributes: {
+                        url: item.homeMedia.data.attributes.url,
+                        name: item.homeMedia.data.attributes.name || item.title,
+                        width: item.homeMedia.data.attributes.width,
+                        height: item.homeMedia.data.attributes.height,
+                        ext: item.homeMedia.data.attributes.ext,
+                        mime: item.homeMedia.data.attributes.mime
+                      }
+                    }
+                  }
+                : (Array.isArray(item.homeMedia) && item.homeMedia.length > 0)
+                ? {
+                    data: {
+                      id: item.homeMedia[0].id,
+                      attributes: {
+                        url: item.homeMedia[0].url,
+                        name: item.homeMedia[0].name || item.title,
+                        width: item.homeMedia[0].width,
+                        height: item.homeMedia[0].height,
+                        ext: item.homeMedia[0].ext,
+                        mime: item.homeMedia[0].mime
+                      }
+                    }
+                  }
+                : item.homeMedia?.url
+                ? {
+                    data: {
+                      id: item.homeMedia.id,
+                      attributes: {
+                        url: item.homeMedia.url,
+                        name: item.homeMedia.name || item.title,
+                        width: item.homeMedia.width,
+                        height: item.homeMedia.height,
+                        ext: item.homeMedia.ext,
+                        mime: item.homeMedia.mime
+                      }
+                    }
+                  }
+                : null,
               createdAt: item.createdAt,
               updatedAt: item.updatedAt
             }
