@@ -10,7 +10,7 @@
               Accueil
             </button>
             <span>/</span>
-            <span class="text-gray-900 font-medium">Portfolio</span>
+            <span class="text-gray-900 font-secondary">Portfolio</span>
           </div>
         </div>
       </div>
@@ -20,9 +20,11 @@
     <header class="py-32 bg-white">
       <div class="container mx-auto px-8">
         <div class="max-w-4xl mx-auto text-center">
-          <h1 class="text-6xl md:text-7xl font-light mb-8 tracking-tight text-gray-900 leading-tight">
+          <h1 class="text-6xl md:text-7xl font-primary mb-8 tracking-tight text-gray-900 leading-tight">
             Portfolio
           </h1>
+          
+
         </div>
       </div>
     </header>
@@ -33,7 +35,7 @@
         <div class="flex flex-wrap gap-8 justify-center">
           <button 
             @click="setActiveFilter('all')"
-            class="text-sm font-medium tracking-widest uppercase transition-all duration-300 hover:text-gray-900"
+            class="text-sm font-secondary tracking-widest uppercase transition-all duration-300 hover:text-gray-900"
             :class="activeFilter === 'all' 
               ? 'text-gray-900' 
               : 'text-gray-400'"
@@ -45,7 +47,7 @@
             v-for="type in projectTypes" 
             :key="type.id"
             @click="setActiveFilter(type.label)"
-            class="text-sm font-medium tracking-widest uppercase transition-all duration-300 hover:text-gray-900"
+            class="text-sm font-secondary tracking-widest uppercase transition-all duration-300 hover:text-gray-900"
             :class="activeFilter === type.label 
               ? 'text-gray-900' 
               : 'text-gray-400'"
@@ -65,14 +67,14 @@
             <div class="w-8 h-8 border-2 border-gray-200 rounded-full"></div>
             <div class="absolute inset-0 w-8 h-8 border-2 border-gray-900 border-t-transparent rounded-full animate-spin"></div>
           </div>
-          <p class="mt-6 text-gray-500 font-light">Chargement...</p>
+          <p class="mt-6 text-gray-500 font-paragraph">Chargement...</p>
         </div>
 
         <!-- État d'erreur -->
         <div v-else-if="error" class="text-center py-32">
           <div class="max-w-md mx-auto">
-            <p class="text-gray-600 text-lg mb-4">{{ error }}</p>
-            <button @click="fetchProjects" class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 font-light transition-all duration-300">
+            <p class="text-gray-600 text-lg mb-4 font-paragraph">{{ error }}</p>
+            <button @click="fetchProjects" class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 font-secondary transition-all duration-300">
               Réessayer
             </button>
           </div>
@@ -84,7 +86,7 @@
             v-for="(project, index) in filteredProjects" 
             :key="project.id"
             :to="`/projects/${createSlug(project.title)}`"
-            class="group cursor-pointer project-card relative overflow-hidden block"
+            class="group cursor-pointer project-card relative overflow-hidden block font-primary"
           >
             
             
@@ -140,14 +142,14 @@
                 <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
-                <span class="text-sm font-light">{{ project?.title || 'Projet' }}</span>
+                <span class="text-sm font-paragraph">{{ project?.title || 'Projet' }}</span>
               </div>
 
               <!-- Overlay avec informations au hover -->
               <div class="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-500 flex items-center justify-center">
                 <div class="w-full p-6 text-center transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                   <!-- Titre du projet -->
-                  <h3 class="text-xl font-light text-white mb-4 leading-tight">
+                  <h3 class="text-xl font-secondary text-white mb-4 leading-tight">
                     {{ project?.title || 'Titre non défini' }}
                   </h3>
                 </div>
@@ -162,14 +164,14 @@
           class="text-center py-32"
         >
           <div v-if="projects.length === 0" class="max-w-md mx-auto">
-            <p class="text-lg text-gray-500 font-light mb-4">Aucun projet trouvé</p>
-            <button @click="fetchProjects" class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 font-light transition-all duration-300">
+            <p class="text-lg text-gray-500 font-paragraph mb-4">Aucun projet trouvé</p>
+            <button @click="fetchProjects" class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 font-secondary transition-all duration-300">
               Actualiser
             </button>
           </div>
           <div v-else class="max-w-md mx-auto">
-            <p class="text-lg text-gray-500 font-light mb-4">Aucun projet dans cette catégorie</p>
-            <button @click="setActiveFilter('all')" class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 font-light transition-all duration-300">
+            <p class="text-lg text-gray-500 font-paragraph mb-4">Aucun projet dans cette catégorie</p>
+            <button @click="setActiveFilter('all')" class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 font-secondary transition-all duration-300">
               Voir tous les projets
             </button>
           </div>

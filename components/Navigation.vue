@@ -88,7 +88,7 @@
                   :key="item.path"
                   :to="item.path"
                   @click="() => { closeMenu(); trackNavigationClick(item.label); }"
-                  class="block text-4xl font-light text-white/80 hover:text-white transition-all duration-300 hover:scale-105 py-2 px-4 rounded-lg group relative"
+                  class="block text-4xl font-secondary text-white/80 hover:text-white transition-all duration-300 hover:scale-105 py-2 px-4 rounded-lg group relative"
                   :style="{ animationDelay: `${0.2 + index * 0.1}s` }"
                 >
                   <span class="relative">
@@ -109,15 +109,15 @@
             <div class="flex-1 flex items-center justify-center">
               <div class="w-full max-w-2xl mx-auto px-8">
                 <div class="text-center mb-8 animate-fade-in-up" style="animation-delay: 0.3s;">
-                  <h2 class="text-3xl font-bold text-white mb-4">Contactez-nous</h2>
-                  <p class="text-white/70 text-lg">Discutons de votre projet</p>
+                  <h2 class="text-3xl font-primary text-white mb-4">Contactez-nous</h2>
+                  <p class="text-white/70 text-lg font-paragraph">Discutons de votre projet</p>
                 </div>
 
                 <!-- Onglets -->
                 <div class="flex justify-center space-x-4 mb-8 animate-fade-in-up" style="animation-delay: 0.4s;">
                   <button
                     @click="() => { activeTab = 'contact'; trackTabChange('contact'); }"
-                    class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg relative group"
+                    class="px-8 py-3 text-lg font-secondary transition-all duration-300 border-b-2 rounded-t-lg relative group"
                     :class="{ 
                       'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'contact', 
                       'text-white/60 border-transparent hover:text-white hover:border-white/30 hover:bg-white/5': activeTab !== 'contact' 
@@ -132,7 +132,7 @@
                   </button>
                   <button
                     @click="() => { activeTab = 'calendar'; trackTabChange('calendar'); }"
-                    class="px-8 py-3 text-lg font-medium transition-all duration-300 border-b-2 rounded-t-lg relative group"
+                    class="px-8 py-3 text-lg font-secondary transition-all duration-300 border-b-2 rounded-t-lg relative group"
                     :class="{ 
                       'text-pyoh-yellow border-pyoh-yellow bg-white/5': activeTab === 'calendar', 
                       'text-white/60 border-transparent hover:text-white hover:border-white/30 hover:bg-white/5': activeTab !== 'calendar' 

@@ -14,7 +14,7 @@
               Portfolio
             </button>
             <span>/</span>
-            <span class="text-gray-900 font-medium">{{ project?.title || 'Chargement...' }}</span>
+            <span class="text-gray-900 font-secondary">{{ project?.title || 'Chargement...' }}</span>
           </nav>
         </div>
       </div>
@@ -25,27 +25,27 @@
       <div class="container mx-auto px-8">
         <!-- Informations du projet -->
         <div class="max-w-4xl mx-auto mb-16">
-          <h1 class="text-5xl md:text-6xl font-light mb-8 text-gray-900 leading-tight">
+          <h1 class="text-5xl md:text-6xl font-primary mb-8 text-gray-900 leading-tight">
             {{ project.title }}
           </h1>
           
           <!-- Métadonnées -->
           <div class="flex flex-wrap gap-8 mb-12 text-sm text-gray-600">
             <div v-if="project.client" class="flex items-center space-x-2">
-              <span class="font-medium">Client :</span>
-              <span>{{ project.client }}</span>
+              <span class="font-secondary">Client :</span>
+              <span class="font-paragraph">{{ project.client }}</span>
             </div>
             <div v-if="project.year" class="flex items-center space-x-2">
-              <span class="font-medium">Année :</span>
-              <span>{{ project.year }}</span>
+              <span class="font-secondary">Année :</span>
+              <span class="font-paragraph">{{ project.year }}</span>
             </div>
             <div v-if="project.projectUrl" class="flex items-center space-x-2">
-              <span class="font-medium">Lien :</span>
+              <span class="font-secondary">Lien :</span>
               <a 
                 :href="project.projectUrl" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                class="text-blue-600 hover:text-blue-800 underline"
+                class="text-blue-600 hover:text-blue-800 underline font-paragraph"
               >
                 Voir le projet
               </a>
@@ -54,7 +54,7 @@
           
           <!-- Description -->
           <div v-if="project.description" class="prose prose-lg max-w-none">
-            <p class="text-gray-700 leading-relaxed">{{ project.description }}</p>
+            <p class="text-gray-700 leading-relaxed font-paragraph">{{ project.description }}</p>
           </div>
         </div>
 
@@ -65,7 +65,7 @@
             <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
               <button
                 @click="activeTab = 'gallery'"
-                class="px-6 py-3 text-sm font-medium transition-all duration-300"
+                class="px-6 py-3 text-sm font-secondary transition-all duration-300"
                 :class="activeTab === 'gallery' 
                   ? 'bg-white text-gray-900 shadow-sm' 
                   : 'text-gray-600 hover:text-gray-900'"
@@ -75,7 +75,7 @@
                           <button 
               v-if="project.url_videos && project.url_videos.length > 0"
               @click="activeTab = 'videos'"
-              class="px-6 py-3 text-sm font-medium transition-all duration-300"
+              class="px-6 py-3 text-sm font-secondary transition-all duration-300"
               :class="activeTab === 'videos' 
                 ? 'bg-white text-gray-900 shadow-sm' 
                 : 'text-gray-900 shadow-sm'"
@@ -112,17 +112,17 @@
           <div class="w-8 h-8 border-2 border-gray-200 rounded-full"></div>
           <div class="absolute inset-0 w-8 h-8 border-2 border-gray-900 border-t-transparent rounded-full animate-spin"></div>
         </div>
-        <p class="mt-6 text-gray-500 font-light">Chargement du projet...</p>
+        <p class="mt-6 text-gray-500 font-paragraph">Chargement du projet...</p>
       </div>
     </div>
 
     <!-- État d'erreur -->
     <div v-else-if="error" class="min-h-screen flex items-center justify-center">
       <div class="text-center max-w-md mx-auto px-8">
-        <p class="text-gray-600 text-lg mb-6">{{ error }}</p>
+        <p class="text-gray-600 text-lg mb-6 font-paragraph">{{ error }}</p>
         <NuxtLink 
           to="/portfolio" 
-          class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 transition-all duration-300 font-light"
+          class="px-6 py-3 bg-gray-900 text-white rounded-none hover:bg-gray-800 transition-all duration-300 font-secondary"
         >
           Retour au portfolio
         </NuxtLink>
@@ -164,7 +164,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <span class="px-4 py-2 bg-white/20 text-white rounded-full text-sm">
+          <span class="px-4 py-2 bg-white/20 text-white rounded-full text-sm font-secondary">
             {{ currentImageIndex + 1 }} / {{ imageMedia.length }}
           </span>
           <button 

@@ -49,7 +49,7 @@
                 <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <p class="text-lg">Aucun media</p>
+                <p class="text-lg font-paragraph">Aucun media</p>
               </div>
             </div>
           </div>
@@ -60,14 +60,14 @@
               <div class="max-w-4xl">
                 <!-- Catégorie -->
                 <div class="mb-4">
-                  <span class="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-sm font-medium text-white/80">
+                  <span class="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-sm font-secondary text-white/80">
                     {{ getProjectCategory(project) }}
                   </span>
                 </div>
 
                 <!-- Titre principal -->
                 <div class="mb-4">
-                  <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight text-white break-words hyphens-none max-w-full">
+                  <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-primary leading-tight text-white break-words hyphens-none max-w-full">
                     {{ getProjectTitle(project) }}
                   </h1>
                 </div>
@@ -79,7 +79,7 @@
           <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
             <NuxtLink 
               to="/portfolio" 
-              class="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg hover:text-white/80 transition-all duration-300 transform hover:scale-105 border border-white/30 hover:border-white/50"
+              class="inline-flex items-center px-8 py-4 text-white font-secondary rounded-lg hover:text-white/80 transition-all duration-300 transform hover:scale-105 border border-white/30 hover:border-white/50"
             >
               Voir tous les projets
               <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,7 +92,7 @@
           <div class="absolute right-8 top-1/2 -translate-y-1/2 z-20">
             <div class="flex flex-col items-center space-y-4">
               <!-- Numérotation -->
-              <div class="text-sm text-white/40 font-medium tracking-widest">
+              <div class="text-sm text-white/40 font-secondary tracking-widest">
                 {{ currentProjectIndex + 1 }} / {{ projects.length }}
               </div>
               
