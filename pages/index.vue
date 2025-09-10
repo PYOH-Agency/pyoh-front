@@ -27,12 +27,8 @@ useHead({
 // Utilisation du composable
 const { 
   featuredProjects, 
-  fetchFeaturedProjects,
-  getUniqueProjectTypes
+  fetchFeaturedProjects
 } = useProjects()
-
-// Récupération des types de projets uniques
-const uniqueProjectTypes = getUniqueProjectTypes()
 
 // Lifecycle
 onMounted(async () => {

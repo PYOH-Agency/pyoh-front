@@ -159,7 +159,7 @@ useHead({
   ]
 })
 
-// Utilisation des composables
+// Utilisation du composable
 const { 
   projects, 
   loading, 
@@ -169,20 +169,53 @@ const {
   getStrapiMediaUrl: strapiMediaUrl 
 } = useProjects()
 
-const {
-  projectTypes,
-  loading: typesLoading,
-  error: typesError,
-  fetchProjectTypes,
-  getFilterTabs
-} = useProjectTypes()
-
 // État réactif
 const activeFilter = ref('all')
 const videoElement = ref(null) // Ref for video element
 
-// Tabs pour les filtres (utilise le composable)
-const filterTabs = getFilterTabs()
+// Types de projets Strapi (maintenant depuis l'API)
+const projectTypes = ref([])
+
+// Tabs pour les filtres
+const filterTabs = computed(() => {
+  const tabs = [
+    { label: 'All', value: 'all' }
+  ]
+  
+  if (projectTypes.value && projectTypes.value.length > 0) {
+    projectTypes.value.forEach(type => {
+      tabs.push({
+        label: type.label,
+        value: type.label
+      })
+    })
+  }
+  
+  return tabs
+})
+
+// Récupérer les types de projets depuis Strapi
+const fetchProjectTypes = async () => {
+  try {
+    const config = useRuntimeConfig()
+    const response = await $fetch(`${config.public.strapiUrl}/api/project-types`)
+    
+    if (response.data) {
+      projectTypes.value = response.data
+    } else {
+      throw new Error('Pas de données dans la réponse')
+    }
+  } catch (err) {
+    console.error('Erreur lors de la récupération des types:', err)
+    
+    // Fallback vers les types statiques
+    projectTypes.value = [
+      { id: 1, label: 'Identité Visuelle', color: '#fddb00' },
+      { id: 2, label: 'Vidéo', color: '#ff6b6b' },
+      { id: 3, label: 'Web', color: '#4ecdc4' }
+    ]
+  }
+}
 
 // Utiliser les projets Strapi uniquement
 const displayProjects = computed(() => {
@@ -379,16 +412,20 @@ const goToProject = (project) => {
 // Lifecycle
 onMounted(async () => {
   try {
-    // Récupérer d'abord les types de projets avec le nouveau composable
+    // Récupérer d'abord les types de projets
     await fetchProjectTypes()
     
-    // Récupérer les projets avec le composable useProjects
-    await fetchProjects({
-      populate: ['media', 'homeMedia', 'coverPicture', 'project_types', 'url_videos'],
-      sort: ['createdAt:desc']
-    })
+    // Récupérer les projets avec populate=* pour inclure coverPicture et types
+    const config = useRuntimeConfig()
+    const directResponse = await $fetch(`${config.public.strapiUrl}/api/projects?populate[0]=coverPicture&populate[1]=media&populate[2]=project_types`)
+    
+    if (directResponse.data && directResponse.data.length > 0) {
+      projects.value = directResponse.data
+    }
   } catch (err) {
-    console.error('Erreur lors du chargement des données:', err)
+    console.error('Erreur lors du chargement des projets:', err)
+    // Fallback vers le composable
+    await fetchProjects()
   }
 })
 </script>
