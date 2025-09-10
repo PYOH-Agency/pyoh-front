@@ -270,8 +270,17 @@ const getProjectSubtitle = (project) => {
 }
 
 const getProjectCategory = (project) => {
-  // Nouvelle structure avec types multiples
-  console.log('🔍 Project Category:', project)
+  // Structure Strapi avec project_types.data
+  if (project?.attributes?.project_types?.data && Array.isArray(project.attributes.project_types.data) && project.attributes.project_types.data.length > 0) {
+    // Si plusieurs types, les afficher tous
+    if (project.attributes.project_types.data.length > 1) {
+      return project.attributes.project_types.data.map(type => type.attributes.label).join(' • ')
+    }
+    // Sinon, retourner le premier type
+    return project.attributes.project_types.data[0].attributes.label
+  }
+  
+  // Nouvelle structure avec types multiples (fallback)
   if (project?.project_types && Array.isArray(project.project_types) && project.project_types.length > 0) {
     // Si plusieurs types, les afficher tous
     if (project.project_types.length > 1) {
@@ -281,7 +290,7 @@ const getProjectCategory = (project) => {
     return project.project_types[0].label
   }
   
-  // Structure Strapi avec attributes
+  // Structure Strapi avec attributes (ancienne structure)
   if (project?.attributes?.project_types && Array.isArray(project.attributes.project_types) && project.attributes.project_types.length > 0) {
     // Si plusieurs types, les afficher tous
     if (project.attributes.project_types.length > 1) {
