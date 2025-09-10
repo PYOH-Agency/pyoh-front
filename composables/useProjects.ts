@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { useStrapi } from '#imports'
-import type { Project, ProjectsResponse } from '~/types/project'
+import type { Project, ProjectsResponse, ProjectType } from '~/types/project'
 
 export const useProjects = () => {
   const { find, findOne } = useStrapi()
@@ -25,7 +25,7 @@ export const useProjects = () => {
       loading.value = true
       error.value = null
 
-      const response = await find<ProjectsResponse>('projects', {
+      const response = await find('projects', {
         populate: options?.populate || ['media', 'homeMedia', 'coverPicture', 'project_types', 'url_videos'],
         sort: options?.sort || ['createdAt:desc'],
         filters: options?.filters || {},
@@ -60,7 +60,7 @@ export const useProjects = () => {
       
       if (response.data && response.data.length > 0) {
         // Adapter la structure des données pour qu'elle corresponde à notre interface
-        featuredProjects.value = response.data.map(item => {
+        featuredProjects.value = response.data.map((item: any) => {
            
            return {
              id: item.id,
@@ -72,6 +72,18 @@ export const useProjects = () => {
                year: item.year,
                featured: item.featured,
                projectUrl: item.projectUrl,
+               project_types: item.project_types ? {
+                 data: item.project_types.data || item.project_types.map((pt: any) => ({
+                   id: pt.id,
+                   attributes: {
+                     name: pt.attributes?.name || pt.name,
+                     label: pt.attributes?.label || pt.label,
+                     createdAt: pt.attributes?.createdAt || pt.createdAt,
+                     updatedAt: pt.attributes?.updatedAt || pt.updatedAt,
+                     publishedAt: pt.attributes?.publishedAt || pt.publishedAt
+                   }
+                 }))
+               } : undefined,
                media: item.media && item.media.length > 0 ? {
                  data: {
                    id: item.media[0].id,
@@ -145,7 +157,7 @@ export const useProjects = () => {
         const allResponse = await $fetch(allUrl)
         
         if (allResponse.data && allResponse.data.length > 0) {
-          featuredProjects.value = allResponse.data.map(item => ({
+          featuredProjects.value = allResponse.data.map((item: any) => ({
             id: item.id,
             attributes: {
               title: item.title,
@@ -155,6 +167,18 @@ export const useProjects = () => {
               year: item.year,
               featured: item.featured,
               projectUrl: item.projectUrl,
+              project_types: item.project_types ? {
+                data: item.project_types.data || item.project_types.map((pt: any) => ({
+                  id: pt.id,
+                  attributes: {
+                    name: pt.attributes?.name || pt.name,
+                    label: pt.attributes?.label || pt.label,
+                    createdAt: pt.attributes?.createdAt || pt.createdAt,
+                    updatedAt: pt.attributes?.updatedAt || pt.updatedAt,
+                    publishedAt: pt.attributes?.publishedAt || pt.publishedAt
+                  }
+                }))
+              } : undefined,
               media: item.media && item.media.length > 0 ? {
                 data: {
                   id: item.media[0].id,
@@ -168,49 +192,6 @@ export const useProjects = () => {
                   }
                 }
               } : null,
-              homeMedia: item.homeMedia?.data?.attributes?.url
-                ? {
-                    data: {
-                      id: item.homeMedia.data.id,
-                      attributes: {
-                        url: item.homeMedia.data.attributes.url,
-                        name: item.homeMedia.data.attributes.name || item.title,
-                        width: item.homeMedia.data.attributes.width,
-                        height: item.homeMedia.data.attributes.height,
-                        ext: item.homeMedia.data.attributes.ext,
-                        mime: item.homeMedia.data.attributes.mime
-                      }
-                    }
-                  }
-                : (Array.isArray(item.homeMedia) && item.homeMedia.length > 0)
-                ? {
-                    data: {
-                      id: item.homeMedia[0].id,
-                      attributes: {
-                        url: item.homeMedia[0].url,
-                        name: item.homeMedia[0].name || item.title,
-                        width: item.homeMedia[0].width,
-                        height: item.homeMedia[0].height,
-                        ext: item.homeMedia[0].ext,
-                        mime: item.homeMedia[0].mime
-                      }
-                    }
-                  }
-                : item.homeMedia?.url
-                ? {
-                    data: {
-                      id: item.homeMedia.id,
-                      attributes: {
-                        url: item.homeMedia.url,
-                        name: item.homeMedia.name || item.title,
-                        width: item.homeMedia.width,
-                        height: item.homeMedia.height,
-                        ext: item.homeMedia.ext,
-                        mime: item.homeMedia.mime
-                      }
-                    }
-                  }
-                : null,
               homeMedia: item.homeMedia?.data?.attributes?.url
                 ? {
                     data: {
@@ -289,7 +270,7 @@ export const useProjects = () => {
       loading.value = true
       error.value = null
 
-      const response = await findOne<Project>('projects', id, {
+      const response = await findOne('projects', id, {
         populate: ['media']
       })
 
@@ -317,6 +298,23 @@ export const useProjects = () => {
     return computed(() => {
       const categories = projects.value.map(project => project.attributes.category)
       return [...new Set(categories)]
+    })
+  }
+
+  // Récupération des types de projets uniques
+  const getUniqueProjectTypes = () => {
+    return computed(() => {
+      const allTypes: ProjectType[] = []
+      projects.value.forEach(project => {
+        if (project.attributes.project_types?.data) {
+          allTypes.push(...project.attributes.project_types.data)
+        }
+      })
+      // Supprimer les doublons basés sur l'ID
+      const uniqueTypes = allTypes.filter((type, index, self) => 
+        index === self.findIndex(t => t.id === type.id)
+      )
+      return uniqueTypes
     })
   }
 
@@ -463,6 +461,7 @@ export const useProjects = () => {
     // Getters
     getProjectsByCategory,
     getUniqueCategories,
+    getUniqueProjectTypes,
     searchProjects,
     
     // Utilitaires

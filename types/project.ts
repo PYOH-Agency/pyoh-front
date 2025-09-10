@@ -39,6 +39,17 @@ export interface StrapiMediaFormat {
   url: string
 }
 
+export interface ProjectType {
+  id: number
+  attributes: {
+    name: string
+    label: string
+    createdAt: string
+    updatedAt: string
+    publishedAt: string
+  }
+}
+
 export interface Project {
   id: number
   attributes: {
@@ -54,6 +65,9 @@ export interface Project {
     colorTheme?: string
     order?: number
     media?: StrapiMedia
+    project_types?: {
+      data: ProjectType[]
+    }
     createdAt: string
     updatedAt: string
     publishedAt: string
