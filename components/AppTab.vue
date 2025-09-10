@@ -10,19 +10,21 @@
           ? 'tab-active' 
           : 'tab-inactive'
       ]"
+      :style="getTabStyles(tab)"
     >
       {{ tab.label }}
       
       <!-- Soulignement au hover -->
       <span 
-        class="absolute -bottom-0.5 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full tab-underline"
+        class="absolute -bottom-0.5 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full"
+        :style="getUnderlineStyles()"
       ></span>
     </button>
   </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   modelValue: {
     type: [String, Number],
     required: true
@@ -54,6 +56,49 @@ defineProps({
 })
 
 defineEmits(['update:modelValue'])
+
+// Fonctions pour les styles dynamiques
+const getTabStyles = (tab) => {
+  const isActive = props.modelValue === tab.value
+  
+  if (isActive) {
+    return {
+      color: getActiveColor(),
+      borderBottom: `2px solid ${getActiveColor()}`
+    }
+  } else {
+    return {
+      color: getInactiveColor(),
+      borderBottom: '2px solid transparent'
+    }
+  }
+}
+
+const getUnderlineStyles = () => {
+  return {
+    backgroundColor: getActiveColor()
+  }
+}
+
+const getActiveColor = () => {
+  if (props.activeColor === 'pyoh-yellow') return '#fddb00'
+  if (props.activeColor === 'gray-900') return '#111827'
+  if (props.activeColor === 'gray-600') return '#4b5563'
+  return props.activeColor
+}
+
+const getInactiveColor = () => {
+  if (props.color === 'gray-400') return '#9ca3af'
+  if (props.color === 'gray-600') return '#4b5563'
+  if (props.color === 'white/60') return 'rgba(255, 255, 255, 0.6)'
+  return props.color
+}
+
+const getHoverColor = () => {
+  if (props.backgroundColor === 'black') return '#ffffff'
+  if (props.activeColor === 'pyoh-yellow') return '#fddb00'
+  return getActiveColor()
+}
 </script>
 
 <style scoped>
@@ -62,40 +107,9 @@ defineEmits(['update:modelValue'])
   width: 100%;
 }
 
-/* Styles des tabs avec couleurs dynamiques */
-.tab-active {
-  color: var(--active-color);
-  border-bottom: 2px solid var(--active-color);
-}
-
-.tab-inactive {
-  color: var(--inactive-color);
-  border-bottom: 2px solid transparent;
-}
-
+/* Hover sur les tabs inactives */
 .tab-inactive:hover {
-  color: var(--hover-color) !important;
-  border-bottom-color: var(--hover-color);
-}
-
-.tab-underline {
-  background-color: var(--active-color);
-}
-
-/* Définir les variables CSS basées sur les props */
-:deep(.tab-active) {
-  --active-color: v-bind(activeColor === 'pyoh-yellow' ? '#fddb00' : activeColor);
-}
-
-:deep(.tab-inactive) {
-  --inactive-color: v-bind(color === 'gray-400' ? '#9ca3af' : color === 'gray-600' ? '#4b5563' : color === 'white/60' ? 'rgba(255, 255, 255, 0.6)' : color);
-}
-
-:deep(.tab-inactive:hover) {
-  --hover-color: v-bind(backgroundColor === 'black' ? '#ffffff' : activeColor === 'pyoh-yellow' ? '#fddb00' : activeColor);
-}
-
-:deep(.tab-underline) {
-  --active-color: v-bind(activeColor === 'pyoh-yellow' ? '#fddb00' : activeColor);
+  color: v-bind(getHoverColor()) !important;
+  border-bottom-color: v-bind(getHoverColor());
 }
 </style>
