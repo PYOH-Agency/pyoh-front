@@ -136,8 +136,12 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
           <!-- Aurélien -->
           <div class="text-center group">
-            <div class="w-48 h-48 mx-auto mb-8 rounded-full bg-gradient-to-br from-pyoh-yellow/20 to-pyoh-yellow/40 flex items-center justify-center group-hover:scale-105 transition-all duration-500">
-              <span class="text-6xl font-bold text-pyoh-yellow">A</span>
+            <div class="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden group-hover:scale-105 transition-all duration-500">
+              <img 
+                src="/images/aurelien.jpeg" 
+                alt="Aurélien - Directeur de création" 
+                class="w-full h-full object-cover"
+              />
             </div>
             <h3 class="text-2xl font-bold mb-2 text-pyoh-yellow">Aurélien</h3>
             <p class="text-lg text-white/60 mb-4">Directeur de création</p>
@@ -148,8 +152,12 @@
 
           <!-- Paul -->
           <div class="text-center group">
-            <div class="w-48 h-48 mx-auto mb-8 rounded-full bg-gradient-to-br from-pyoh-yellow/20 to-pyoh-yellow/40 flex items-center justify-center group-hover:scale-105 transition-all duration-500">
-              <span class="text-6xl font-bold text-pyoh-yellow">P</span>
+            <div class="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden group-hover:scale-105 transition-all duration-500">
+              <img 
+                src="/images/paul-bugeon.png" 
+                alt="Paul - CTO & Expert Web" 
+                class="w-full h-full object-cover"
+              />
             </div>
             <h3 class="text-2xl font-bold mb-2 text-pyoh-yellow">Paul</h3>
             <p class="text-lg text-white/60 mb-4">CTO & Expert Web (Code & No-Code)</p>
@@ -160,8 +168,12 @@
 
           <!-- Valentin -->
           <div class="text-center group">
-            <div class="w-48 h-48 mx-auto mb-8 rounded-full bg-gradient-to-br from-pyoh-yellow/20 to-pyoh-yellow/40 flex items-center justify-center group-hover:scale-105 transition-all duration-500">
-              <span class="text-6xl font-bold text-pyoh-yellow">V</span>
+            <div class="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden group-hover:scale-105 transition-all duration-500">
+              <img 
+                src="/images/valentin-chat.png" 
+                alt="Valentin - Réalisateur & Photographe" 
+                class="w-full h-full object-cover"
+              />
             </div>
             <h3 class="text-2xl font-bold mb-2 text-pyoh-yellow">Valentin</h3>
             <p class="text-lg text-white/60 mb-4">Réalisateur & Photographe</p>
