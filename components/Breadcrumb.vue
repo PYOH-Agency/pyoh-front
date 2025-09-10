@@ -1,16 +1,7 @@
 <template>
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-6 px-4">
-    <div class="flex items-center justify-between">
-        <!-- Logo PYOH -->
-        <div class="flex items-center">
-          <img 
-            :src="logoUrl" 
-            :alt="'PYOH Logo'" 
-            class="h-12 w-auto"
-          />
-        </div>
-        
-        <!-- Breadcrumb à droite -->
+    <div class="flex items-center justify-center">
+        <!-- Breadcrumb centré -->
         <nav class="flex items-center space-x-4 text-sm text-gray-500">
           <button @click="goToHome" class="hover:text-gray-700 transition-colors text-left">
             Accueil
@@ -43,12 +34,7 @@ const props = defineProps({
   }
 })
 
-// Logo dynamique selon la couleur de fond
-const logoUrl = computed(() => {
-  return props.backgroundColor === 'white' 
-    ? '/images/Logos Pyoh-04.png'  // Logo noir pour fond blanc
-    : '/images/Logos Pyoh-07.png'  // Logo blanc pour fond noir
-})
+// Logo supprimé - plus nécessaire
 
 // Navigation
 const goToHome = () => {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navigation />
+    <Navigation v-if="!isPortfolioPage" />
     <NuxtPage />
     <Footer v-if="!isHomePage" />
   </div>
@@ -15,6 +15,11 @@ const route = useRoute()
 // Vérifier si on est sur la page home
 const isHomePage = computed(() => {
   return route.path === '/'
+})
+
+// Vérifier si on est sur la page portfolio
+const isPortfolioPage = computed(() => {
+  return route.path === '/portfolio' || route.path.startsWith('/portfolio/')
 })
 </script>
 
