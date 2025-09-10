@@ -271,6 +271,7 @@ const getProjectSubtitle = (project) => {
 
 const getProjectCategory = (project) => {
   // Nouvelle structure avec types multiples
+  console.log('🔍 Project Category:', project)
   if (project?.project_types && Array.isArray(project.project_types) && project.project_types.length > 0) {
     // Si plusieurs types, les afficher tous
     if (project.project_types.length > 1) {

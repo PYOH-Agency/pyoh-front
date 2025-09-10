@@ -199,9 +199,9 @@ const isDarkBackground = computed(() => props.backgroundColor === 'black')
 
 const buttonClasses = computed(() => {
   if (isDarkBackground.value) {
-    return `bg-white/20 border-white/30 hover:bg-white/30 ${isMenuOpen.value ? 'bg-white/40' : ''}`
+    return `bg-white/60 border-white/50 hover:bg-white/80 ${isMenuOpen.value ? 'bg-white/90' : ''}`
   } else {
-    return `bg-black/20 border-black/30 hover:bg-black/30 ${isMenuOpen.value ? 'bg-black/40' : ''}`
+    return `bg-black/60 border-black/50 hover:bg-black/80 ${isMenuOpen.value ? 'bg-black/90' : ''}`
   }
 })
 
@@ -227,11 +227,11 @@ const closeMenu = () => {
 }
 
 .nav-button {
-  @apply bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 p-4 rounded-full border border-white/20;
+  @apply bg-white/60 backdrop-blur-sm hover:bg-white/80 transition-all duration-300 p-4 rounded-full border border-white/50;
 }
 
 .nav-button:hover {
-  @apply bg-white/20;
+  @apply bg-white/80;
 }
 
 .nav-button:disabled {

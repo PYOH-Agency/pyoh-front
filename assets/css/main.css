@@ -340,11 +340,11 @@ h3.font-primary,
 
 /* Navigation personnalisée */
 .nav-button {
-  @apply bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 p-4 rounded-full border border-white/20;
+  @apply bg-white/60 backdrop-blur-sm hover:bg-white/80 transition-all duration-300 p-4 rounded-full border border-white/50;
 }
 
 .nav-button:hover {
-  @apply bg-white/20;
+  @apply bg-white/80;
 }
 
 .nav-button:disabled {

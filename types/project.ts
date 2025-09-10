@@ -20,6 +20,7 @@ export interface StrapiMedia {
       url: string
       previewUrl?: string
       provider: string
+      project_types?: any[]
       provider_metadata?: any
       createdAt: string
       updatedAt: string
