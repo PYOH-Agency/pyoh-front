@@ -261,14 +261,6 @@ const getProjectTitle = (project) => {
   return 'Titre manquant'
 }
 
-const getProjectSubtitle = (project) => {
-  // Structure Strapi directe
-  if (project.subtitle) return project.subtitle
-  // Structure transformée
-  if (project.attributes?.subtitle) return project.attributes.subtitle
-  return 'Sous-titre manquant'
-}
-
 const getProjectCategory = (project) => {
   // Structure Strapi avec project_types.data
   if (project?.attributes?.project_types?.data && Array.isArray(project.attributes.project_types.data) && project.attributes.project_types.data.length > 0) {
