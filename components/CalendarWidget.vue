@@ -2,8 +2,8 @@
   <div class="space-y-6">
     <!-- En-tête -->
     <div class="text-center">
-      <h3 class="text-2xl font-bold text-white mb-2">Prendre rendez-vous</h3>
-      <p class="text-white/60">Planifiez un appel de découverte pour votre projet</p>
+      <h3 class="text-xl md:text-2xl font-bold text-white mb-2">Prendre rendez-vous</h3>
+      <p class="text-sm md:text-base text-white/60">Planifiez un appel de découverte pour votre projet</p>
     </div>
 
     <!-- Cal.com Widget -->
@@ -77,8 +77,15 @@ onMounted(() => {
 /* Responsive */
 @media (max-width: 768px) {
   .cal-iframe {
-    height: 300px;
-    min-height: 300px;
+    height: 400px;
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cal-iframe {
+    height: 450px;
+    min-height: 450px;
   }
 }
 </style>

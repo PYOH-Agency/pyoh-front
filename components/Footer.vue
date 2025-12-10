@@ -1,14 +1,14 @@
 <template>
-  <footer class="bg-black border-t border-white/10 py-16 relative z-10">
-    <div class="container mx-auto px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+  <footer class="bg-black border-t border-white/10 py-8 md:py-16 relative z-10">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
         
         <!-- Logo et description -->
         <div class="lg:col-span-2">
-          <div class="mb-6">
-            <img src="/images/Logos Pyoh-06.png" alt="PYOH" class="h-20 w-auto" />
+          <div class="mb-4 md:mb-6">
+            <img src="/images/Logos Pyoh-06.png" alt="PYOH" class="h-16 md:h-20 w-auto" />
           </div>
-          <p class="text-white/70 text-lg leading-relaxed max-w-md mb-6">
+          <p class="text-white/70 text-base md:text-lg leading-relaxed max-w-md mb-4 md:mb-6">
             Votre vision, notre créativité. Agence de communication visuelle full services qui transforme vos idées en expériences mémorables.
           </p>
           <div class="flex space-x-4">
@@ -27,8 +27,8 @@
 
         <!-- Services -->
         <div>
-          <h3 class="text-xl font-bold text-white mb-6">Nos Services</h3>
-          <ul class="space-y-3">
+          <h3 class="text-lg md:text-xl font-bold text-white mb-4 md:mb-6">Nos Services</h3>
+          <ul class="space-y-2 md:space-y-3">
             <li>
               <NuxtLink to="/portfolio?filter=visual-identity" class="text-white/60 hover:text-pyoh-yellow transition-colors duration-300">
                 Identité Visuelle
@@ -54,8 +54,8 @@
 
         <!-- Contact -->
         <div>
-          <h3 class="text-xl font-bold text-white mb-6">Contact</h3>
-          <ul class="space-y-3">
+          <h3 class="text-lg md:text-xl font-bold text-white mb-4 md:mb-6">Contact</h3>
+          <ul class="space-y-2 md:space-y-3">
             <li>
               <a href="mailto:contact@pyoh.fr" class="text-white/60 hover:text-pyoh-yellow transition-colors duration-300 flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,12 +77,12 @@
       </div>
 
       <!-- Séparateur -->
-      <div class="border-t border-white/10 mt-12 pt-8">
+      <div class="border-t border-white/10 mt-8 md:mt-12 pt-6 md:pt-8">
         <div class="flex flex-col md:flex-row justify-between items-center">
-          <p class="text-white/40 text-sm">
+          <p class="text-white/40 text-xs md:text-sm text-center md:text-left mb-4 md:mb-0">
             © {{ new Date().getFullYear() }} PYOH. Tous droits réservés.
           </p>
-          <div class="flex space-x-6 mt-4 md:mt-0">
+          <div class="flex flex-wrap justify-center gap-4 md:gap-6 md:mt-0">
             <NuxtLink to="/" class="text-white/40 hover:text-pyoh-yellow transition-colors duration-300 text-sm">
               Accueil
             </NuxtLink>

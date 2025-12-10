@@ -47,6 +47,9 @@ body {
   color: var(--text-primary);
   background-color: var(--primary-bg);
   overflow-x: hidden;
+  /* Amélioration du touch sur mobile */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 /* Typographie personnalisée */
@@ -614,6 +617,12 @@ h3.font-primary,
 
 .gradient-overlay {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Amélioration du touch sur mobile */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Responsive utilities */

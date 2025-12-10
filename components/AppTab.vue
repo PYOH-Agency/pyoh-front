@@ -1,10 +1,10 @@
 <template>
-  <div class="flex space-x-1">
+  <div class="flex space-x-1 md:space-x-2">
     <button
       v-for="(tab, index) in tabs"
       :key="tab.id || index"
       @click="$emit('update:modelValue', tab.value)"
-      class="px-6 py-3 text-sm font-secondary transition-all duration-300 relative group"
+      class="px-3 md:px-6 py-2 md:py-3 text-xs md:text-sm font-secondary transition-all duration-300 relative group touch-manipulation"
       :class="[
         modelValue === tab.value 
           ? 'tab-active' 

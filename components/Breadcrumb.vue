@@ -1,17 +1,17 @@
 <template>
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-6 px-4">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-3 md:py-6 px-2 md:px-4">
     <div class="flex items-center justify-center">
         <!-- Breadcrumb centré -->
-        <nav class="flex items-center space-x-4 text-sm text-gray-500">
-          <button @click="goToHome" class="hover:text-gray-700 transition-colors text-left">
+        <nav class="flex items-center space-x-2 md:space-x-4 text-xs md:text-sm text-gray-500">
+          <button @click="goToHome" class="hover:text-gray-700 transition-colors text-left touch-manipulation">
             Accueil
           </button>
           <span>/</span>
-          <button @click="goToPortfolio" class="hover:text-gray-700 transition-colors text-left">
+          <button @click="goToPortfolio" class="hover:text-gray-700 transition-colors text-left touch-manipulation">
             Portfolio
           </button>
           <span v-if="currentPage" class="text-gray-900 font-secondary">/</span>
-          <span v-if="currentPage" class="text-gray-900 font-secondary">{{ currentPage }}</span>
+          <span v-if="currentPage" class="text-gray-900 font-secondary truncate max-w-[150px] md:max-w-none">{{ currentPage }}</span>
         </nav>
     </div>
   </header>
