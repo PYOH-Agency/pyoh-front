@@ -70,18 +70,6 @@
         </div>
       </div>
 
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 backdrop-blur">
-        <div class="text-left">
-          <p class="text-sm uppercase tracking-[0.2em] text-white/50">newsletter</p>
-          <p class="text-lg text-white/80">Recevez le lancement en avant-première.</p>
-        </div>
-        <a
-          href="mailto:contact@pyoh.fr?subject=Je%20veux%20être%20prévenu%20du%20lancement%20PYOH"
-          class="btn-primary bg-white text-black hover:bg-white/90"
-        >
-          Me tenir informé·e
-        </a>
-      </div>
     </main>
   </div>
 </template>
