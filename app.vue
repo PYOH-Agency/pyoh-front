@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Navigation v-if="!isPortfolioPage" />
+    <Navigation v-if="!isPortfolioPage && !isMaintenancePage" />
     <NuxtPage />
-    <Footer v-if="!isHomePage" />
+    <Footer v-if="!isHomePage && !isMaintenancePage" />
   </div>
 </template>
 
@@ -21,5 +21,8 @@ const isHomePage = computed(() => {
 const isPortfolioPage = computed(() => {
   return route.path === '/portfolio' || route.path.startsWith('/portfolio/')
 })
+
+// Masquer la navigation et le footer sur la page de maintenance
+const isMaintenancePage = computed(() => route.path === '/maintenance')
 </script>
 
